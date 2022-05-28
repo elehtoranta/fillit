@@ -16,15 +16,16 @@
 
 NAME			= fillit
 
-SRCS_DIR		= sources/
-SRCS			= main.c verify.c
-OBJS			= $(SRCS:.c=.o)
+SRCDIR			= sources/
+SRCS			:= $(shell find $(SRCDIR) -name '*.c')
 
+OBJS			= $(SRCS:.c=.o)
 CC				= clang
 CFLAGS			= -Wall -Wextra -Werror
 
-INCL			= includes/
-LIB				= ft
+INCL			= sources/
+LIB				= -lft
+LIBDIR			= -Llib
 
 RM				= /bin/rm -rf
 
@@ -34,11 +35,11 @@ RM				= /bin/rm -rf
 
 all : $(NAME)
 
-$(NAME) : $(SRCS)
-	$(CC) $(CFLAGS) $(OBJS)
+$(NAME) : $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBDIR) $(LIB) -o $(NAME)
 
-%.o : %.c
-	$(CC) $(CFLAGS) $(SRCS) $< -c
+$(SRCDIR)/%.o : %.c
+	$(CC) $(CFLAGS) -I$(INCL) -c $<
 
 clean :
 	$(RM) $(OBJS)

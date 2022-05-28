@@ -6,39 +6,47 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/20 18:20:30 by Erkka            ###   ########.fr       */
+/*   Updated: 2022/05/28 20:23:02 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/fillit.h"
-#define MAX_VALID_FILE_SIZE 545
-#define BUFF_SIZE 552
+#include "fillit.h"
+#define MAX_READ 545
 
-static void	handle_error(const char *error)
+static int	invalid_chars(char *buf, ssize_t ret)
 {
-	putendl(error);
-}
+	size_t	i;
 
-static int	check_file(int fd)
-{
-	char	buf[BUFF_SIZE];
-	ssize_t	ret;
-
-	ret = read(fd, buf, BUFF_SIZE);
-	if (ret == -1)
-		handle_error("Read operation failed with -1.");
-	if (ret > MAX_VALID_FILE_SIZE)
-		handle_error("ERROR: input file was too large.");
-	return (0); //on success
+	i = 0;
+	while (buf[i] == '.' || buf[i] == '\n' || buf[i] == '#')
+		i++;
+	if (i == (size_t)ret)
+		return (0);
+	else
+		return (-1);		
 }
 
 int verify_file(const char *file)
 {
 	int	fd;
 
-	fd = open(file, O_RDONLY);
-	if (!check_file())
-		return (-1);
+	char	buf[MAX_READ + 1];
+	ssize_t	ret;
 
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
+		return (error(OPEN_FAIL));
+	ret = read(fd, buf, MAX_READ + 1);
+	if (ret < 0)
+		return (error(READ_FAIL));
+	buf[ret] = 0;
+	if (ret > MAX_READ)
+		return (error(FILE_MAX));
+	if ((ret + 1) % 21 != 0)
+		return (error(FILE_FORMAT));
+	if (invalid_chars(&buf[0], ret))
+		return (error(FILE_CHARS));
+	if (close(fd) == -1)
+		return (error(CLOSE_FAIL));
 	return (0);
 }
