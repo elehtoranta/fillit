@@ -23,13 +23,12 @@ static int	invalid_chars(char *buf, ssize_t ret)
 	if (i == (size_t)ret)
 		return (0);
 	else
-		return (-1);		
+		return (-1);
 }
 
-int verify_file(const char *file)
+int	verify_file(const char *file)
 {
-	int	fd;
-
+	int		fd;
 	char	buf[MAX_READ + 1];
 	ssize_t	ret;
 

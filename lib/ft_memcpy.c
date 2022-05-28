@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/28 22:21:53 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/28 22:21:55 by elehtora         ###   ########.fr       */
+/*   Created: 2021/11/11 17:27:02 by elehtora          #+#    #+#             */
+/*   Updated: 2022/02/19 23:14:16 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include <string.h>
 
-int	main(int argc, char **argv)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	char	*file;
+	size_t	i;
 
-	if (argc != 2)
-		return (error(BAD_ARGS));
-	file = argv[1];
-	if (!verify_file(file))
-		return (-1);
-	return (0);
+	if (!dst && !src)
+		return (dst);
+	i = 0;
+	while (n-- > 0)
+	{
+		((char *)dst)[i] = ((char *)src)[i];
+		i++;
+	}
+	return (dst);
 }

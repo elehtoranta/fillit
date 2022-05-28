@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/28 22:21:53 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/28 22:21:55 by elehtora         ###   ########.fr       */
+/*   Created: 2021/11/11 18:25:15 by elehtora          #+#    #+#             */
+/*   Updated: 2022/03/22 21:37:43 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include <string.h>
 
-int	main(int argc, char **argv)
+void	*ft_memrchr(const void *s, int c, size_t n)
 {
-	char	*file;
-
-	if (argc != 2)
-		return (error(BAD_ARGS));
-	file = argv[1];
-	if (!verify_file(file))
-		return (-1);
-	return (0);
+	while (n-- > 0)
+	{
+		if (((unsigned char *) s)[n] == (unsigned char) c)
+			return (&(((void *) s)[n]));
+	}
+	return (NULL);
 }

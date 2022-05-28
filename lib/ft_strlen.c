@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/28 22:21:53 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/28 22:21:55 by elehtora         ###   ########.fr       */
+/*   Created: 2021/11/05 02:24:51 by elehtora          #+#    #+#             */
+/*   Updated: 2022/02/19 14:30:31 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include <string.h>
 
-int	main(int argc, char **argv)
+size_t	ft_strlen(const char *s)
 {
-	char	*file;
+	size_t	len;
 
-	if (argc != 2)
-		return (error(BAD_ARGS));
-	file = argv[1];
-	if (!verify_file(file))
-		return (-1);
-	return (0);
+	len = 0;
+	while (s[len] != '\0')
+		len++;
+	return (len);
 }

@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strdel.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/28 22:21:53 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/28 22:21:55 by elehtora         ###   ########.fr       */
+/*   Created: 2022/01/20 19:24:30 by elehtora          #+#    #+#             */
+/*   Updated: 2022/02/20 20:05:00 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include <stdlib.h>
+#include <string.h>
 
-int	main(int argc, char **argv)
+void	ft_strdel(char **as)
 {
-	char	*file;
-
-	if (argc != 2)
-		return (error(BAD_ARGS));
-	file = argv[1];
-	if (!verify_file(file))
-		return (-1);
-	return (0);
+	if (as)
+	{
+		free((void *)(*as));
+		*as = NULL;
+	}
 }

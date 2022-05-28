@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/28 22:21:53 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/28 22:21:55 by elehtora         ###   ########.fr       */
+/*   Created: 2022/01/08 07:03:40 by elehtora          #+#    #+#             */
+/*   Updated: 2022/02/20 17:49:25 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char	*file;
+	char			*new_str;
+	unsigned int	i;
 
-	if (argc != 2)
-		return (error(BAD_ARGS));
-	file = argv[1];
-	if (!verify_file(file))
-		return (-1);
-	return (0);
+	if (!s || !f)
+		return (NULL);
+	new_str = ft_strnew(ft_strlen(s));
+	if (new_str == NULL)
+		return (NULL);
+	i = 0;
+	while (s[i] != '\0')
+	{
+		new_str[i] = f(i, s[i]);
+		i++;
+	}
+	return (new_str);
 }

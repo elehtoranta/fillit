@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/28 22:21:53 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/28 22:21:55 by elehtora         ###   ########.fr       */
+/*   Created: 2021/12/22 22:18:16 by elehtora          #+#    #+#             */
+/*   Updated: 2022/02/20 20:05:09 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*file;
+	char	*newstr;
+	size_t	len1;
 
-	if (argc != 2)
-		return (error(BAD_ARGS));
-	file = argv[1];
-	if (!verify_file(file))
-		return (-1);
-	return (0);
+	if (!s1 || !s2)
+		return (NULL);
+	len1 = ft_strlen(s1);
+	newstr = ft_strnew(len1 + ft_strlen(s2));
+	if (!newstr)
+		return (NULL);
+	ft_strcpy(newstr, s1);
+	ft_strcpy((newstr + len1), s2);
+	return (newstr);
 }

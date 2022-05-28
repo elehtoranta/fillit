@@ -1,25 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/28 22:21:53 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/28 22:21:55 by elehtora         ###   ########.fr       */
+/*   Created: 2022/02/17 04:13:13 by elehtora          #+#    #+#             */
+/*   Updated: 2022/02/17 04:59:08 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {
-	char	*file;
+	t_list	*new;
+	t_list	*head;
+	t_list	*tmp_new;
 
-	if (argc != 2)
-		return (error(BAD_ARGS));
-	file = argv[1];
-	if (!verify_file(file))
-		return (-1);
-	return (0);
+	tmp_new = NULL;
+	head = NULL;
+	while (lst)
+	{
+		new = ft_lstnew(0, 0);
+		if (!new)
+			return (NULL);
+		new = f(lst);
+		if (!head)
+			head = new;
+		if (tmp_new)
+			tmp_new->next = new;
+		tmp_new = new;
+		lst = lst->next;
+	}
+	return (head);
 }

@@ -1,25 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/28 22:21:53 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/28 22:21:55 by elehtora         ###   ########.fr       */
+/*   Created: 2021/11/11 16:38:13 by elehtora          #+#    #+#             */
+/*   Updated: 2022/03/03 18:43:31 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include <unistd.h>
 
-int	main(int argc, char **argv)
+static int	ft_isdigit(long int n)
 {
-	char	*file;
+	return (-9 <= n && n <= 9);
+}
 
-	if (argc != 2)
-		return (error(BAD_ARGS));
-	file = argv[1];
-	if (!verify_file(file))
-		return (-1);
-	return (0);
+void	ft_putnbr_fd(int n, int fd)
+{
+	long int	ln;
+
+	ln = (long int) n;
+	if (!ft_isdigit(ln))
+		ft_putnbr_fd(((int)ln - ((int)ln % 10)) / 10, fd);
+	else if (ln < 0)
+		write(fd, "-", 1);
+	if (ln < 0)
+		ln *= (-1);
+	ln = ln % 10 + '0';
+	write(fd, &ln, 1);
 }
