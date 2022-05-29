@@ -23,8 +23,9 @@
 # define BOARD_SIZE 16
 
 // Public function declarations
-int	verify_file(const char *file);
+int	validate_file(const char *file);
 int	error(int errorcode);
+
 
 // Matching error types, error descriptions are in error.c (norm)
 typedef enum e_error
@@ -40,11 +41,19 @@ typedef enum e_error
 
 typedef struct s_piece
 {
-	uint16_t	piece;
+	char	id;
+	// int	ordering_weight;
+	uint8_t	piece[4][2];
+	t_piece	*next;
 }	t_piece;
 
 typedef struct s_board
 {
-	uint16_t	board[BOARD_SIZE];
+	char	board[BOARD_SIZE][BOARD_SIZE];
+	t_piece *pieces;
+	size_t	width;
+	size_t	height;
+	size_t	solution_minimum;
 }	t_board;
+
 #endif

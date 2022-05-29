@@ -13,6 +13,20 @@
 #include "fillit.h"
 #define MAX_READ 545
 
+static int	invalid_piece(char *buf, ssize_t ret)
+{
+	size_t	col;
+	size_t	row;
+	size_t	pieces;
+
+	col = 0;
+	pieces = 0;
+	while (col < ret)
+	{
+		// if (buf[col] == '#')
+	}
+}
+
 static int	invalid_chars(char *buf, ssize_t ret)
 {
 	size_t	i;
@@ -26,7 +40,7 @@ static int	invalid_chars(char *buf, ssize_t ret)
 		return (-1);
 }
 
-int	verify_file(const char *file)
+int	validate_file(const char *file)
 {
 	int		fd;
 	char	buf[MAX_READ + 1];
