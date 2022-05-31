@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 15:37:26 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/29 15:37:29 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/05/30 12:58:24 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@ static t_board	*new_board(size_t solution_minimum)
 	board->height = 0;
 	// Solution_minimum assigned in caller ((ft_sqrt(4 * pieces) + 1) / 1)
 	board->solution_minimum = solution_minimum;
+	board->pieces = NULL;
 	return (board);
 }
 
-static t_piece	*new_piece(char id)
+t_piece	*new_piece(char id)
 {
 	t_piece	*piece;
 

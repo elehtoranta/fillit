@@ -6,26 +6,12 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/28 20:23:02 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/05/30 13:30:00 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 #define MAX_READ 545
-
-static int	invalid_piece(char *buf, ssize_t ret)
-{
-	size_t	col;
-	size_t	row;
-	size_t	pieces;
-
-	col = 0;
-	pieces = 0;
-	while (col < ret)
-	{
-		// if (buf[col] == '#')
-	}
-}
 
 static int	invalid_chars(char *buf, ssize_t ret)
 {
