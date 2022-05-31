@@ -20,7 +20,7 @@ static void	print_error_message(int errorcode, const char **error_messages)
 	ft_putendl_fd(error_messages[errorcode], 1);
 }
 
-// Return -1 for caller to pass on
+// Returns -1 for caller to pass on
 int	error(int errorcode)
 {
 	const char	*error_messages[ERROR_MESSAGES];

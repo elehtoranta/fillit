@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/28 20:23:02 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/05/30 13:30:00 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	invalid_chars(char *buf, ssize_t ret)
 		return (-1);
 }
 
-int	verify_file(const char *file)
+int	validate_file(const char *file)
 {
 	int		fd;
 	char	buf[MAX_READ + 1];

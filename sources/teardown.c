@@ -1,29 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   teardown.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/28 22:21:53 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/30 12:41:50 by elehtora         ###   ########.fr       */
+/*   Created: 2022/05/29 16:43:50 by elehtora          #+#    #+#             */
+/*   Updated: 2022/05/31 16:21:54 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-
-
-int	main(int argc, char **argv)
+static void	*free_pieces(t_piece **p_pieces)
 {
-	char	*file;
+	t_piece	*next;
 
-	if (argc != 2)
-		return (error(BAD_ARGS));
-	file = argv[1];
-	if (verify_file(file) == -1)
-		return (-1);
-	if (teardown() == -1)
-		return (-1);
-	return (0);
+	next = *p_pieces;
+	while ((*p_pieces)->next)
+	{
+		next = (*p_pieces)->next;
+		free(*p_pieces);
+		*p_pieces = NULL;
+		*p_pieces = next;
+	}
+	p_pieces = NULL;
+}
+
+// Frees memory of allocated members
+int	teardown(t_board *b)
+{
+
 }
