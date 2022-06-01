@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 16:43:50 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/31 16:21:54 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/01 20:32:29 by Erkka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,13 @@ static void	*free_pieces(t_piece **p_pieces)
 		*p_pieces = next;
 	}
 	p_pieces = NULL;
+	return ((void *) p_pieces);
 }
 
 // Frees memory of allocated members
-int	teardown(t_board *b)
-{
-
-}
+/*
+ *int	teardown(t_board *b)
+ *{
+ *
+ *}
+ */
