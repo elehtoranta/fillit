@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/18 15:59:06 by elehtora          #+#    #+#              #
-#    Updated: 2022/06/01 20:39:43 by Erkka            ###   ########.fr        #
+#    Updated: 2022/06/01 20:51:50 by Erkka            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,6 @@ clean :
 	$(RM) $(OBJS)
 
 fclean : clean
-	$(RM) $(NAME)
+	$(RM) $(NAME) *.dSYM
 
 re : fclean all

@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/01 20:18:19 by Erkka            ###   ########.fr       */
+/*   Updated: 2022/06/01 21:08:03 by Erkka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,28 @@
 static t_piece	*get_piece(char *buf, int id)
 {
 	size_t	i;
+	t_piece	*new_piece;
 
+	new_piece = (t_piece *) malloc(sizeof(t_piece));
 	i = 0;
 	while (i < 20)
 	{
 		if (buf[i] == '#')
 		{
 			ft_putstr("# found, number: ");
-			// Remember to convert id into char when assigning to pieces[]
 			ft_putnbr(id);
 			ft_putendl("");
+			// Remember to convert id into char when assigning to pieces[],
+			// below is an effort to that
+			new_piece->piece[id][0] = i % 5;
+			new_piece->piece[id][1] = i / (id + 1) % 5;
+			new_piece->id = (char)(id + 'A');
+			new_piece->next = NULL;
+			id++;
 		}
 		i++;
 	}
-	return (NULL);
-	/*return (pieces);*/
+	return (new_piece);
 }
 
 static int	extract(t_piece *pieces, char *buf, ssize_t ret)
