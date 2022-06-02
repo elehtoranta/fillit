@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:28:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/02 17:45:24 by Erkka            ###   ########.fr       */
+/*   Updated: 2022/06/02 19:13:03 by Erkka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef enum e_error
 	FILE_FORMAT,
 	INVALID_CHARS,
 	CLOSE_FAIL,
+	BAD_PIECE,
 }	t_error;
 
 typedef struct s_piece
@@ -56,6 +57,5 @@ typedef struct s_board
 // Public function declarations
 int		extract_file(const char *file, t_piece *pieces);
 int		error(int errorcode);
-t_piece	*new_piece(char id);
 
 #endif

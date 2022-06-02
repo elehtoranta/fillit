@@ -6,12 +6,12 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 21:30:30 by elehtora          #+#    #+#             */
-/*   Updated: 2022/05/28 21:30:35 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/02 19:49:07 by Erkka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
-#define ERROR_MESSAGES 7
+#define ERROR_MESSAGES 8
 
 // Subject asks for 'error' on stdout, so this needs to be dumbed down
 static void	print_error_message(int errorcode, const char **error_messages)
@@ -32,6 +32,7 @@ int	error(int errorcode)
 	error_messages[4] = "Bad file format, weird amount of characters.";
 	error_messages[5] = "Bad file format, forbidden characters.";
 	error_messages[6] = "Closing file failed.";
+	error_messages[7] = "Handled piece is invalid, bad connections.";
 	print_error_message(errorcode, &error_messages[0]);
 	return (-1);
 }

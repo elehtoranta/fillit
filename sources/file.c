@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/02 18:24:09 by Erkka            ###   ########.fr       */
+/*   Updated: 2022/06/02 20:01:42 by Erkka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,40 +24,63 @@ static void	print_piece(uint16_t piece)
 	while (i >= 0)
 	{
 		if (piece & 1 << i)
-			ft_putstr("#");
+			ft_putchar('#');
 		else
-			ft_putstr(".");
+			ft_putchar('.');
 		if (i % 4 == 0)
 			ft_putendl("");
 		i--;
 	}
 }
 
+// Checking recursively for legitimate tetrimino, e.g. checking valid
+// connections. It does so by checking counter-clockwise, starting from
+// the top, for a hash # in the buffer. If a # is found, it recurses
+// from the found hash's position
+static int	touches(char *buf, size_t i, size_t hashes, char last)
+{
+	if (hashes == 4)
+		return (hashes);
+	if (i >= 5 && buf[i - 5] == '#' && last != 'u') // check up
+		hashes = touches(&buf[i - 5], i - 5, hashes + 1, 'u');
+	else if (i != 0 && i % 5 != 0 && buf[i - 1] == '#' && last != 'l')	// check left
+		hashes = touches(&buf[i - 1], i - 1, hashes + 1, 'l');
+	else if (i < 15 && buf[i + 5] == '#' && last != 'd') // check down
+		hashes = touches(&buf[i + 5], i + 5, hashes + 1, 'd');
+	else if (i % 5 < 4 && buf[i + 1] == '#' && last != 'r') // check right
+		hashes = touches(&buf[i + 1], i + 1, hashes + 1, 'r');
+	return (hashes);
+}
+
 // Takes the starting index of the piece as parameter 'buf'
-static void	set_piece(t_piece *piece, char *buf, int id)
+static int	set_piece(t_piece *piece, char *buf, int id)
 {
 	size_t	i;
-	size_t	count;
 	size_t	row;
+	size_t	contacts; //must be exactly 6 or 8 contacts between blocks
 
 	i = 0;
-	count = 1;
 	row = 0;
+	contacts = 0;
 	while (i < PIECE_READ)
 	{
 		if (i % 4 == 0 && i != 0)
 			row++;
 		if (buf[i] == '#')
 		{
-			// Remember to convert id into char when assigning to pieces[],
-			// below is an effort to that;
+			if (!contacts)
+				contacts += touches(&buf[i], i, contacts, '0');
 			piece->piece |= 1 << ((PIECE_BLOCKS - 1) - i + row);
-			count++;
 		}
 		i++;
 	}
+	ft_putchar(id + 'A');
+	ft_putnbr(contacts);
+	if (contacts != 4)
+		return (error(BAD_PIECE));
 	piece->weight = 0;
 	piece->id = (char)(id + 'A');
+	return (0);
 }
 
 static int	extract(t_piece *pieces, char *buf, ssize_t ret)
@@ -71,10 +94,12 @@ static int	extract(t_piece *pieces, char *buf, ssize_t ret)
 	while (nth_piece < total_pieces)
 	{
 		set_piece(&pieces[nth_piece], &buf[nth_piece * PIECE_READ], nth_piece);
-		ft_putstr("Piece: ");
-		ft_putnbr(pieces[nth_piece].piece);
-		ft_putendl("");
-		print_piece(pieces[nth_piece].piece);
+		/*
+		 *ft_putstr("Piece: ");
+		 *ft_putchar(pieces[nth_piece].id);
+		 *ft_putendl("");
+		 */
+		/*print_piece(pieces[nth_piece].piece);*/
 		nth_piece++;
 	}
 	return (0);
