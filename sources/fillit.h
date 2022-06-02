@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:28:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/01 20:30:14 by Erkka            ###   ########.fr       */
+/*   Updated: 2022/06/02 17:45:24 by Erkka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,9 @@ typedef enum e_error
 
 typedef struct s_piece
 {
-	char			id;
-	// int	ordering_weight;
-	uint8_t			piece[4][2];
-	struct s_piece	*next;
+	char		id;
+	uint8_t		weight;
+	uint16_t	piece;
 }	t_piece;
 
 typedef struct s_board
@@ -57,7 +56,6 @@ typedef struct s_board
 // Public function declarations
 int		extract_file(const char *file, t_piece *pieces);
 int		error(int errorcode);
-int		teardown(void);
 t_piece	*new_piece(char id);
 
 #endif

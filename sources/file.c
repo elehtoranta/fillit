@@ -6,39 +6,58 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/01 21:08:03 by Erkka            ###   ########.fr       */
+/*   Updated: 2022/06/02 18:24:09 by Erkka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 #define MAX_READ 545
+#define BYTE_BITS 8
+#define PIECE_READ 21
+#define PIECE_BLOCKS 16
+
+static void	print_piece(uint16_t piece)
+{
+	int	i;
+
+	i = sizeof(uint16_t) * BYTE_BITS - 1;
+	while (i >= 0)
+	{
+		if (piece & 1 << i)
+			ft_putstr("#");
+		else
+			ft_putstr(".");
+		if (i % 4 == 0)
+			ft_putendl("");
+		i--;
+	}
+}
 
 // Takes the starting index of the piece as parameter 'buf'
-static t_piece	*get_piece(char *buf, int id)
+static void	set_piece(t_piece *piece, char *buf, int id)
 {
 	size_t	i;
-	t_piece	*new_piece;
+	size_t	count;
+	size_t	row;
 
-	new_piece = (t_piece *) malloc(sizeof(t_piece));
 	i = 0;
-	while (i < 20)
+	count = 1;
+	row = 0;
+	while (i < PIECE_READ)
 	{
+		if (i % 4 == 0 && i != 0)
+			row++;
 		if (buf[i] == '#')
 		{
-			ft_putstr("# found, number: ");
-			ft_putnbr(id);
-			ft_putendl("");
 			// Remember to convert id into char when assigning to pieces[],
-			// below is an effort to that
-			new_piece->piece[id][0] = i % 5;
-			new_piece->piece[id][1] = i / (id + 1) % 5;
-			new_piece->id = (char)(id + 'A');
-			new_piece->next = NULL;
-			id++;
+			// below is an effort to that;
+			piece->piece |= 1 << ((PIECE_BLOCKS - 1) - i + row);
+			count++;
 		}
 		i++;
 	}
-	return (new_piece);
+	piece->weight = 0;
+	piece->id = (char)(id + 'A');
 }
 
 static int	extract(t_piece *pieces, char *buf, ssize_t ret)
@@ -47,12 +66,15 @@ static int	extract(t_piece *pieces, char *buf, ssize_t ret)
 	size_t	total_pieces;
 	size_t	nth_piece;
 
-	
-	total_pieces = (ret + 1) / 21;
+	total_pieces = (ret + 1) / PIECE_READ;
 	nth_piece = 0;
 	while (nth_piece < total_pieces)
 	{
-		pieces[nth_piece] = *get_piece(&buf[nth_piece * 20], nth_piece);
+		set_piece(&pieces[nth_piece], &buf[nth_piece * PIECE_READ], nth_piece);
+		ft_putstr("Piece: ");
+		ft_putnbr(pieces[nth_piece].piece);
+		ft_putendl("");
+		print_piece(pieces[nth_piece].piece);
 		nth_piece++;
 	}
 	return (0);
