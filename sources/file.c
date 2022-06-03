@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/02 20:01:42 by Erkka            ###   ########.fr       */
+/*   Updated: 2022/06/03 13:31:49 by Erkka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,50 +33,67 @@ static void	print_piece(uint16_t piece)
 	}
 }
 
-// Checking recursively for legitimate tetrimino, e.g. checking valid
-// connections. It does so by checking counter-clockwise, starting from
-// the top, for a hash # in the buffer. If a # is found, it recurses
-// from the found hash's position
-static int	touches(char *buf, size_t i, size_t hashes, char last)
-{
-	if (hashes == 4)
-		return (hashes);
-	if (i >= 5 && buf[i - 5] == '#' && last != 'u') // check up
-		hashes = touches(&buf[i - 5], i - 5, hashes + 1, 'u');
-	else if (i != 0 && i % 5 != 0 && buf[i - 1] == '#' && last != 'l')	// check left
-		hashes = touches(&buf[i - 1], i - 1, hashes + 1, 'l');
-	else if (i < 15 && buf[i + 5] == '#' && last != 'd') // check down
-		hashes = touches(&buf[i + 5], i + 5, hashes + 1, 'd');
-	else if (i % 5 < 4 && buf[i + 1] == '#' && last != 'r') // check right
-		hashes = touches(&buf[i + 1], i + 1, hashes + 1, 'r');
-	return (hashes);
-}
+/*
+ * Find the number of contacting blocks. This function is called for each
+ * block individually. The resulting number in the caller has to be
+ * 6 OR 8 contacts exactly, or the tetrimino is invalid and the
+ * program must terminate with an error.
+ *
+ * Checking is done clockwise. The first check is for out-of-bounds,
+ * the second for the actual hash.
+ */
+/*
+ *static int	get_contacts(char *buf, size_t i)
+ *{
+ *    size_t	contacts;
+ *
+ *    contacts = 0;
+ *    if (i >= 5 && *(buf - 5) == '#') //up
+ *        contacts++;
+ *    if (i % 5 < 4 && *(buf + 1) == '#') //right
+ *        contacts++;
+ *    if (i < 15 && *(buf + 5) == '#') //down
+ *        contacts++;
+ *    if (i % 5 > 0 && *(buf - 1) == '#') //left
+ *        contacts++;
+ *    return (contacts);
+ *}
+ */
+
 
 // Takes the starting index of the piece as parameter 'buf'
 static int	set_piece(t_piece *piece, char *buf, int id)
 {
 	size_t	i;
 	size_t	row;
-	size_t	contacts; //must be exactly 6 or 8 contacts between blocks
+	size_t	contacts;
 
 	i = 0;
 	row = 0;
 	contacts = 0;
 	while (i < PIECE_READ)
 	{
+		/*ft_putchar(buf[i]); // printing pieces from chars*/
 		if (i % 4 == 0 && i != 0)
 			row++;
 		if (buf[i] == '#')
 		{
-			if (!contacts)
-				contacts += touches(&buf[i], i, contacts, '0');
+			if (i >= 5 && buf[i - 5] == '#') //up
+				contacts++;
+			if (i % 5 < 4 && buf[i + 1] == '#') //right
+				contacts++;
+			if (i < 15 && buf[i + 5] == '#') //down
+				contacts++;
+			if (i % 5 > 0 && buf[i - 1] == '#') //left
+				contacts++;
 			piece->piece |= 1 << ((PIECE_BLOCKS - 1) - i + row);
 		}
 		i++;
 	}
 	ft_putchar(id + 'A');
 	ft_putnbr(contacts);
-	if (contacts != 4)
+	ft_putendl("");
+	if (contacts != 6 && contacts != 8)
 		return (error(BAD_PIECE));
 	piece->weight = 0;
 	piece->id = (char)(id + 'A');
@@ -99,7 +116,7 @@ static int	extract(t_piece *pieces, char *buf, ssize_t ret)
 		 *ft_putchar(pieces[nth_piece].id);
 		 *ft_putendl("");
 		 */
-		/*print_piece(pieces[nth_piece].piece);*/
+		print_piece(pieces[nth_piece].piece);
 		nth_piece++;
 	}
 	return (0);
