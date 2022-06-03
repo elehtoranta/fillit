@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/03 13:31:49 by Erkka            ###   ########.fr       */
+/*   Updated: 2022/06/03 17:08:45 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,8 @@ static int	extract(t_piece *pieces, char *buf, ssize_t ret)
 	nth_piece = 0;
 	while (nth_piece < total_pieces)
 	{
-		set_piece(&pieces[nth_piece], &buf[nth_piece * PIECE_READ], nth_piece);
+		if (set_piece(&pieces[nth_piece], &buf[nth_piece * PIECE_READ], nth_piece) == -1)
+			return (-1);
 		/*
 		 *ft_putstr("Piece: ");
 		 *ft_putchar(pieces[nth_piece].id);
@@ -125,14 +126,22 @@ static int	extract(t_piece *pieces, char *buf, ssize_t ret)
 static int	invalid_chars(char *buf, ssize_t ret)
 {
 	size_t	i;
+	size_t	hashes;
 
 	i = 0;
+	hashes = 0;
 	while (buf[i] == '.' || buf[i] == '\n' || buf[i] == '#')
+	{
+		if (buf[i] == '#')
+			hashes++;
 		i++;
-	if (i == (size_t)ret)
-		return (0);
+	}
+	if (i != (size_t)ret)
+		return (error(INVALID_CHARS));
+	else if (hashes != ((size_t)ret + 1) / 21 * 4)
+		return (error(BAD_HASH_COUNT));
 	else
-		return (-1);
+		return (0);
 }
 
 static int	verify(char *buf, ssize_t ret)
@@ -142,7 +151,7 @@ static int	verify(char *buf, ssize_t ret)
 	if ((ret + 1) % 21 != 0)
 		return (error(FILE_FORMAT));
 	if (invalid_chars(&buf[0], ret))
-		return (error(INVALID_CHARS));
+		return (-1);
 	return (0);
 }
 
