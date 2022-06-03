@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 21:30:30 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/03 17:06:48 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:20:00 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ int	error(int errorcode)
 	error_messages[5] = "Bad file format, forbidden characters.";
 	error_messages[6] = "Number of blocks (#) doesn't match.";
 	error_messages[7] = "Closing file failed.";
-	error_messages[8] = "Handled piece is invalid: bad connections.";
+	error_messages[8] = "Piece has mismatching connections.";
+	error_messages[9] = "Missing or misplaced separating newline.";
+	error_messages[10] = "Piece format: misplaced hashes, newlines or dots.";
 	print_error_message(errorcode, &error_messages[0]);
 	return (-1);
 }

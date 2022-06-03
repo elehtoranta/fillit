@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/03 17:08:45 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:32:17 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #define PIECE_READ 21
 #define PIECE_BLOCKS 16
 
+/*Debugging*/
 static void	print_piece(uint16_t piece)
 {
 	int	i;
@@ -60,6 +61,31 @@ static void	print_piece(uint16_t piece)
  *}
  */
 
+static int	check_piece_format(char *buf)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < PIECE_READ)
+	{
+		if (i % 5 < 4)
+		{
+			if (buf[i] != '#' && buf[i] != '.')
+				return (error(BAD_PIECE_FORMAT));
+		}
+		if (i % 5 == 4)
+		{
+			if (buf[i] != '\n')
+				return (error(BAD_PIECE_FORMAT));
+		}
+		i++;
+	}
+	/*
+	 *if (buf[i] != '\n')
+	 *    return (error(BAD_PIECE_FORMAT));
+	 */
+	return (0);
+}
 
 // Takes the starting index of the piece as parameter 'buf'
 static int	set_piece(t_piece *piece, char *buf, int id)
@@ -71,8 +97,11 @@ static int	set_piece(t_piece *piece, char *buf, int id)
 	i = 0;
 	row = 0;
 	contacts = 0;
+	if (check_piece_format(buf) == -1)
+		return (-1);
 	while (i < PIECE_READ)
 	{
+		/*Debugging*/
 		/*ft_putchar(buf[i]); // printing pieces from chars*/
 		if (i % 4 == 0 && i != 0)
 			row++;
@@ -90,11 +119,12 @@ static int	set_piece(t_piece *piece, char *buf, int id)
 		}
 		i++;
 	}
+	/*Debugging*/
 	ft_putchar(id + 'A');
 	ft_putnbr(contacts);
 	ft_putendl("");
 	if (contacts != 6 && contacts != 8)
-		return (error(BAD_PIECE));
+		return (error(BAD_PIECE_CONNECTION));
 	piece->weight = 0;
 	piece->id = (char)(id + 'A');
 	return (0);
@@ -112,11 +142,6 @@ static int	extract(t_piece *pieces, char *buf, ssize_t ret)
 	{
 		if (set_piece(&pieces[nth_piece], &buf[nth_piece * PIECE_READ], nth_piece) == -1)
 			return (-1);
-		/*
-		 *ft_putstr("Piece: ");
-		 *ft_putchar(pieces[nth_piece].id);
-		 *ft_putendl("");
-		 */
 		print_piece(pieces[nth_piece].piece);
 		nth_piece++;
 	}
@@ -134,6 +159,8 @@ static int	invalid_chars(char *buf, ssize_t ret)
 	{
 		if (buf[i] == '#')
 			hashes++;
+		if (i + 1 % PIECE_READ == 0 && buf[i] != '\n' && i < (size_t)ret)
+			return(error(MISSING_NEWLINE));
 		i++;
 	}
 	if (i != (size_t)ret)

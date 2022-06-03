@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:28:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/03 17:00:08 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:17:48 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 // Constant definitions
 # define BOARD_SIZE 16
 # define MAX_PIECES 26
-# define ERROR_MESSAGES 9
+# define ERROR_MESSAGES 11
 
 
 // Matching error types, error descriptions are in error.c (norm)
@@ -38,7 +38,9 @@ typedef enum e_error
 	INVALID_CHARS,
 	BAD_HASH_COUNT,
 	CLOSE_FAIL,
-	BAD_PIECE,
+	BAD_PIECE_CONNECTION,
+	MISSING_NEWLINE,
+	BAD_PIECE_FORMAT,
 }	t_error;
 
 typedef struct s_piece
