@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/04 14:06:28 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/05 23:33:15 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ static int	set_piece(t_piece *piece, char *buf, int id)
 	}
 	/*Debugging*/
 	ft_putchar(id + 'A');
-	ft_putnbr(contacts);
 	ft_putendl("");
 	piece->weight = 0;
 	piece->id = (char)(id + 'A');
@@ -102,95 +101,125 @@ static int	extract(t_piece *pieces, char *buf, ssize_t ret)
 		if (set_piece(&pieces[nth_piece], &buf[nth_piece * PIECE_READ], nth_piece) == -1)
 			return (-1);
 		print_piece(pieces[nth_piece].piece);
+		ft_putnbr(pieces[nth_piece].piece);
 		nth_piece++;
 	}
 	return (0);
 }
 
-static int	count_contacts(char *buf)
-{
-	size_t	contacts;
+/*
+ *static int	count_contacts(char *buf, size_t i)
+ *{
+ *    size_t	contacts;
+ *
+ *    contacts = 0;
+ *    ft_putchar(buf[i - 5]);
+ *    if (i >= 5 && buf[i - 5] == '#') //up
+ *        contacts++;
+ *    if (i % 5 < 4 && buf[i + 1] == '#') //right
+ *        contacts++;
+ *    if (i < 15 && buf[i + 5] == '#') //down
+ *        contacts++;
+ *    if (i % 5 > 0 && buf[i - 1] == '#') //left
+ *        contacts++;
+ *    ft_putnbr(i);
+ *    ft_putnbr(contacts);
+ *    return (contacts);
+ *}
+ */
 
-	contacts = 0;
-	if (i >= 5 && buf[i - 5] == '#') //up
-		contacts++;
-	if (i % 5 < 4 && buf[i + 1] == '#') //right
-		contacts++;
-	if (i < 15 && buf[i + 5] == '#') //down
-		contacts++;
-	if (i % 5 > 0 && buf[i - 1] == '#') //left
-		contacts++;
-	return (contacts);
-}
-
-static int	validate_pieces(char *buf, size_t ret)
+static int	is_good_piece(char *buf, size_t hashes, size_t contacts)
 {
 	size_t	i;
-	size_t	hashes;
-	size_t	contacts;
 
 	i = 0;
-	hashes = 0;
-	contacts = 0;
 	while (i < PIECE_READ - 1)
 	{
+		/*ft_putchar(buf[i]); //debug*/
 		if (i % 5 < 4 && (buf[i] != '#' && buf[i] != '.'))
 			return (error(BAD_PIECE_FORMAT));
 		if (i % 5 == 4 && buf[i] != '\n')
 			return (error(BAD_PIECE_FORMAT));
 		if (buf[i] == '#')
 		{
-			/*Insert function to iterate piece by piece*/
 			hashes++;
-			/*Last param to check if it's the last piece*/
-			if (validate_piece(&buf[i], ret - i - 21) == -1)
-				return (-1);
-			contacts = count_contacts(buf[i]);
-			if (contacts != 6 ** contacts != 8)
-				return (error(BAD_PIECE_CONNECTION));
+			if (i >= 5 && buf[i - 5] == '#') //up
+				contacts++;
+			if (i % 5 < 4 && buf[i + 1] == '#') //right
+				contacts++;
+			if (i < 15 && buf[i + 5] == '#') //down
+				contacts++;
+			if (i % 5 > 0 && buf[i - 1] == '#') //left
+				contacts++;
+			/*contacts += count_contacts(&buf[i], i);*/
 		}
 		i++;
 	}
-	if (hashes != ((size_t)ret + 1) / 21 * 4)
+	if (hashes != 4)
 		return (error(BAD_HASH_COUNT));
+	if (contacts != 6 && contacts != 8)
+		return (error(BAD_PIECE_CONNECTION));
+	return (i);
+}
+
+static int	validate_pieces(char *buf, size_t ret)
+{
+	ssize_t	i;
+
+	i = 0;
+	while ((size_t)i < ret)
+	{
+		if (is_good_piece(&buf[i], 0, 0 && buf[i + 1] == '\n') == -1)
+				return (-1);
+		i += PIECE_READ;
+		/*
+		 *if (buf[i] != '\n' && (size_t)i < ret && i > 0)
+		 *    return (error(MISSING_NEWLINE));
+		 */
+	}
 	return (0);
 }
 
-static int	invalid_chars(char *buf, ssize_t ret)
-{
-	size_t	i;
-	size_t	hashes;
-
-	i = 0;
-	hashes = 0;
-	if (validate_piece(&buf[i]) == -1)
-		return (-1)
-	while (buf[i] == '.' || buf[i] == '\n' || buf[i] == '#')
-	{
-		if (buf[i] == '#')
-			hashes++;
-		if (i + 1 % PIECE_READ == 0 && buf[i] != '\n' && i < (size_t)ret)
-			return(error(MISSING_NEWLINE));
-		i++;
-	}
-	if (i != (size_t)ret)
-		return (error(INVALID_CHARS));
-	else if (hashes != ((size_t)ret + 1) / 21 * 4)
-		return (error(BAD_HASH_COUNT));
-	else
-		return (0);
-}
+/*
+ *static int	invalid_chars(char *buf, ssize_t ret)
+ *{
+ *    size_t	i;
+ *
+ *    i = 0;
+ *    while (buf[i] == '.' || buf[i] == '\n' || buf[i] == '#')
+ *    {
+ *        if (i + 1 % PIECE_READ == 0 && buf[i] != '\n' && i < (size_t)ret)
+ *            return(error(MISSING_NEWLINE));
+ *        i++;
+ *    }
+ *    if (i != (size_t)ret)
+ *        return (error(INVALID_CHARS));
+ *    else if (hashes != ((size_t)ret + 1) / 21 * 4)
+ *        return (error(BAD_HASH_COUNT));
+ *    else
+ *        return (0);
+ *}
+ */
 
 static int	verify(char *buf, ssize_t ret)
 {
+	size_t	valid;
+
+	valid = 0;
 	if (ret > MAX_READ)
 		return (error(FILE_MAX));
 	if ((ret + 1) % 21 != 0)
 		return (error(FILE_FORMAT));
-	if (validate_pieces(&buf[0], ret) == -1)
+	if (validate_pieces(&buf[valid], ret) == -1)
 		return (-1);
-	if (invalid_chars(&buf[0], ret))
-		return (-1);
+	/*
+	 *if (validate_pieces(&buf[0], ret) == -1)
+	 *    return (-1);
+	 */
+	/*
+	 *if (invalid_chars(&buf[0], ret))
+	 *    return (-1);
+	 */
 	return (0);
 }
 
