@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/03 18:32:17 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/04 14:06:28 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,44 +61,15 @@ static void	print_piece(uint16_t piece)
  *}
  */
 
-static int	check_piece_format(char *buf)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < PIECE_READ)
-	{
-		if (i % 5 < 4)
-		{
-			if (buf[i] != '#' && buf[i] != '.')
-				return (error(BAD_PIECE_FORMAT));
-		}
-		if (i % 5 == 4)
-		{
-			if (buf[i] != '\n')
-				return (error(BAD_PIECE_FORMAT));
-		}
-		i++;
-	}
-	/*
-	 *if (buf[i] != '\n')
-	 *    return (error(BAD_PIECE_FORMAT));
-	 */
-	return (0);
-}
-
 // Takes the starting index of the piece as parameter 'buf'
 static int	set_piece(t_piece *piece, char *buf, int id)
 {
 	size_t	i;
 	size_t	row;
-	size_t	contacts;
 
 	i = 0;
 	row = 0;
-	contacts = 0;
-	if (check_piece_format(buf) == -1)
-		return (-1);
+	/*Check for piece delimiter in caller*/
 	while (i < PIECE_READ)
 	{
 		/*Debugging*/
@@ -106,25 +77,13 @@ static int	set_piece(t_piece *piece, char *buf, int id)
 		if (i % 4 == 0 && i != 0)
 			row++;
 		if (buf[i] == '#')
-		{
-			if (i >= 5 && buf[i - 5] == '#') //up
-				contacts++;
-			if (i % 5 < 4 && buf[i + 1] == '#') //right
-				contacts++;
-			if (i < 15 && buf[i + 5] == '#') //down
-				contacts++;
-			if (i % 5 > 0 && buf[i - 1] == '#') //left
-				contacts++;
 			piece->piece |= 1 << ((PIECE_BLOCKS - 1) - i + row);
-		}
 		i++;
 	}
 	/*Debugging*/
 	ft_putchar(id + 'A');
 	ft_putnbr(contacts);
 	ft_putendl("");
-	if (contacts != 6 && contacts != 8)
-		return (error(BAD_PIECE_CONNECTION));
 	piece->weight = 0;
 	piece->id = (char)(id + 'A');
 	return (0);
@@ -148,6 +107,55 @@ static int	extract(t_piece *pieces, char *buf, ssize_t ret)
 	return (0);
 }
 
+static int	count_contacts(char *buf)
+{
+	size_t	contacts;
+
+	contacts = 0;
+	if (i >= 5 && buf[i - 5] == '#') //up
+		contacts++;
+	if (i % 5 < 4 && buf[i + 1] == '#') //right
+		contacts++;
+	if (i < 15 && buf[i + 5] == '#') //down
+		contacts++;
+	if (i % 5 > 0 && buf[i - 1] == '#') //left
+		contacts++;
+	return (contacts);
+}
+
+static int	validate_pieces(char *buf, size_t ret)
+{
+	size_t	i;
+	size_t	hashes;
+	size_t	contacts;
+
+	i = 0;
+	hashes = 0;
+	contacts = 0;
+	while (i < PIECE_READ - 1)
+	{
+		if (i % 5 < 4 && (buf[i] != '#' && buf[i] != '.'))
+			return (error(BAD_PIECE_FORMAT));
+		if (i % 5 == 4 && buf[i] != '\n')
+			return (error(BAD_PIECE_FORMAT));
+		if (buf[i] == '#')
+		{
+			/*Insert function to iterate piece by piece*/
+			hashes++;
+			/*Last param to check if it's the last piece*/
+			if (validate_piece(&buf[i], ret - i - 21) == -1)
+				return (-1);
+			contacts = count_contacts(buf[i]);
+			if (contacts != 6 ** contacts != 8)
+				return (error(BAD_PIECE_CONNECTION));
+		}
+		i++;
+	}
+	if (hashes != ((size_t)ret + 1) / 21 * 4)
+		return (error(BAD_HASH_COUNT));
+	return (0);
+}
+
 static int	invalid_chars(char *buf, ssize_t ret)
 {
 	size_t	i;
@@ -155,6 +163,8 @@ static int	invalid_chars(char *buf, ssize_t ret)
 
 	i = 0;
 	hashes = 0;
+	if (validate_piece(&buf[i]) == -1)
+		return (-1)
 	while (buf[i] == '.' || buf[i] == '\n' || buf[i] == '#')
 	{
 		if (buf[i] == '#')
@@ -177,6 +187,8 @@ static int	verify(char *buf, ssize_t ret)
 		return (error(FILE_MAX));
 	if ((ret + 1) % 21 != 0)
 		return (error(FILE_FORMAT));
+	if (validate_pieces(&buf[0], ret) == -1)
+		return (-1);
 	if (invalid_chars(&buf[0], ret))
 		return (-1);
 	return (0);
