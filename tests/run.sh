@@ -26,7 +26,7 @@ if [ $# == 1 ]; then
 	echo -e "${BOLDRED} TESTING INVALID INPUTS ${RESET}"
 	for file in $TEST_INVALID;
 	do
-		echo -e "Testing ${file#${TEST_INVALID}} from ${TEST_INVALID#./%/*}:"
+		echo -e "Testing ${file#${TEST_INVALID}} from ${TEST_INVALID%/*}:"
 		../fillit $file | grep --color='auto' ERROR
 		echo
 	done
