@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/05 23:33:15 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/06 09:34:48 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,46 @@
 #define BYTE_BITS 8
 #define PIECE_READ 21
 #define PIECE_BLOCKS 16
+#define MAX_SHIFT 15
 
 /*Debugging*/
-static void	print_piece(uint16_t piece)
+/*Here we read a bit representation that is input from right to left*/
+static void	print_piece_r2l(uint16_t piece)
 {
 	int	i;
 
-	i = sizeof(uint16_t) * BYTE_BITS - 1;
-	while (i >= 0)
+	i = 1;
+	while (i <= PIECE_BLOCKS)
 	{
-		if (piece & 1 << i)
+		if (piece & 1 << (i - 1))
 			ft_putchar('#');
 		else
 			ft_putchar('.');
-		if (i % 4 == 0)
+		if (i % 4 == 0) // i starts from 1 due to this clause
 			ft_putendl("");
-		i--;
+		i++;
 	}
 }
+
+/*
+ *[>Debugging<]
+ *static void	print_piece_l2r(uint16_t piece)
+ *{
+ *    int	i;
+ *
+ *    i = sizeof(uint16_t) * BYTE_BITS - 1;
+ *    while (i >= 0)
+ *    {
+ *        if (piece & 1 << i)
+ *            ft_putchar('#');
+ *        else
+ *            ft_putchar('.');
+ *        if (i % 4 == 0)
+ *            ft_putendl("");
+ *        i--;
+ *    }
+ *}
+ */
 
 /*
  * Find the number of contacting blocks. This function is called for each
@@ -70,19 +92,25 @@ static int	set_piece(t_piece *piece, char *buf, int id)
 	i = 0;
 	row = 0;
 	/*Check for piece delimiter in caller*/
+	/*
+	 *ft_putchar(buf[i]);
+	 *ft_putendl(" at beginning of set_piece");
+	 */
 	while (i < PIECE_READ)
 	{
 		/*Debugging*/
 		/*ft_putchar(buf[i]); // printing pieces from chars*/
-		if (i % 4 == 0 && i != 0)
+		/*if (i % 4 == 0 && i != 0)*/
+		if (buf[i] == '\n' && i > 0)
 			row++;
 		if (buf[i] == '#')
-			piece->piece |= 1 << ((PIECE_BLOCKS - 1) - i + row);
+			piece->piece |= 1 << (i - row);
+			/*piece->piece |= 1 << ((PIECE_BLOCKS - 1) - i + row);*/
 		i++;
 	}
 	/*Debugging*/
-	ft_putchar(id + 'A');
-	ft_putendl("");
+	/*ft_putchar(id + 'A');*/
+	/*ft_putendl(" (from chars)");*/
 	piece->weight = 0;
 	piece->id = (char)(id + 'A');
 	return (0);
@@ -92,17 +120,18 @@ static int	extract(t_piece *pieces, char *buf, ssize_t ret)
 {
 
 	size_t	total_pieces;
-	size_t	nth_piece;
+	size_t	nth;
 
 	total_pieces = (ret + 1) / PIECE_READ;
-	nth_piece = 0;
-	while (nth_piece < total_pieces)
+	nth = 0;
+	while (nth < total_pieces)
 	{
-		if (set_piece(&pieces[nth_piece], &buf[nth_piece * PIECE_READ], nth_piece) == -1)
+		if (set_piece(&pieces[nth], &buf[nth * PIECE_READ], nth) == -1)
 			return (-1);
-		print_piece(pieces[nth_piece].piece);
-		ft_putnbr(pieces[nth_piece].piece);
-		nth_piece++;
+		print_piece_r2l(pieces[nth].piece);
+		ft_putnbr(pieces[nth].piece);
+		ft_putendl("");
+		nth++;
 	}
 	return (0);
 }
