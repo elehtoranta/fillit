@@ -1,10 +1,6 @@
 #!/bin/bash
 # Run this test script from './fillit/tests'
 
-BOLDRED='\e[1;31m'
-BOLDGREEN='\e[1;32m'
-RESET='\e[0m'
-
 # Update the binary
 cd .. && make && make clean && cd tests
 
@@ -12,10 +8,10 @@ TEST_PATH=./test_files/
 TEST_VALID=${TEST_PATH}valid/*
 TEST_INVALID=${TEST_PATH}invalid/*
 
-echo -e "\n ${BOLDGREEN}Starting tests for fillit...\n${RESET}"
+echo -e "\n Starting tests for fillit...\n"
 
 if [[ -z ${1+x} || $1 = 'v' || $1 = 'a' ]]; then
-	echo -e "${BOLDGREEN} TESTING VALID INPUTS ${RESET}"
+	echo -e "TESTING VALID INPUTS "
 	for file in $TEST_VALID;
 	do
 		echo -e "Testing ${file#${TEST_VALID}} from ${TEST_VALID%/*}:"
@@ -25,7 +21,7 @@ fi
 
 if [[ -z ${1+x} || $1 = 'i' ||  $1 = 'a' ]]; then
 	echo
-	echo -e "${BOLDRED} TESTING INVALID INPUTS ${RESET}"
+	echo -e "TESTING INVALID INPUTS "
 	for file in $TEST_INVALID;
 	do
 		echo -e "Testing ${file#${TEST_INVALID}} from ${TEST_INVALID%/*}:"
