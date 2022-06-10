@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/18 15:59:06 by elehtora          #+#    #+#              #
-#    Updated: 2022/06/06 11:39:19 by elehtora         ###   ########.fr        #
+#    Updated: 2022/06/10 17:18:14 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,14 +18,18 @@ NAME			= fillit
 
 SRCDIR			= sources
 SRCS			:= $(shell find $(SRCDIR) -name '*.c')
+UTILDIR			= tests/utils
+UTILS			:= $(shell find $(UTILDIR) -name '*.c')
 
 OBJS			= $(SRCS:.c=.o)
 CC				= clang
 CFLAGS			= -Wall -Wextra -Werror
 
-INCL			= sources
+INCL			= -Isources -Itests/utils
+
 LIB				= -lft
 LIBDIR			= -Llib
+LIB_BIN			= libft.a
 
 RM				= /bin/rm -rf
 
@@ -33,7 +37,7 @@ RM				= /bin/rm -rf
 ### RULES ###
 #############
 
-.SILENT:
+#.SILENT:
 
 all : $(NAME)
 
@@ -42,11 +46,15 @@ $(NAME) : $(OBJS)
 	echo "Creating binary $(NAME)."
 
 $(SRCDIR)/%.o : %.c
-	$(CC) $(CFLAGS) -I$(INCL) -c $<
+	$(CC) $(CFLAGS) $(INCL) -c $<
 
-debug :
-	$(CC) -g $(SRCS) -I$(INCL) $(LIBDIR) $(LIB) -o $(NAME)
+debug : $(OBJS)
+	$(CC) -g $(SRCS) $(INCL) $(LIBDIR) $(LIB) -o $(NAME)
 	@echo "Creating debug binary $(NAME)."
+
+utils :
+	$(CC) -g $(SRCS) $(UTILS) $(INCL) $(LIBDIR) $(LIB) -o $(NAME)
+	@echo "Creating debug binary with test_utils $(NAME)."
 
 clean :
 	$(RM) $(OBJS)

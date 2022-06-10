@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/06 15:38:47 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/10 14:49:48 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,105 +16,6 @@
 #define PIECE_READ 21
 #define PIECE_BLOCKS 16
 #define MAX_SHIFT 15
-
-/*Debugging*/
-/*Here we read a bit representation that is input from right to left*/
-static void	print_piece_r2l(uint16_t piece)
-{
-	int	i;
-
-	i = 1;
-	while (i <= PIECE_BLOCKS)
-	{
-		if (piece & 1 << (i - 1))
-			ft_putchar('#');
-		else
-			ft_putchar('.');
-		if (i % 4 == 0) // i starts from 1 due to this clause
-			ft_putendl("");
-		i++;
-	}
-}
-
-/*Debugging*/
-/*
- *static void	print_piece_l2r(uint16_t piece)
- *{
- *    int	i;
- *
- *    i = sizeof(uint16_t) * BYTE_BITS - 1;
- *    while (i >= 0)
- *    {
- *        if (piece & 1 << i)
- *            ft_putchar('#');
- *        else
- *            ft_putchar('.');
- *        if (i % 4 == 0)
- *            ft_putendl("");
- *        i--;
- *    }
- *}
- */
-
-// Takes the starting index of the piece as parameter 'buf'
-static int	set_piece(t_piece *piece, char *buf, int id)
-{
-	size_t	i;
-	size_t	row;
-
-	i = 0;
-	row = 0;
-	/*Debugging*/
-	/*
-	 *ft_putchar(buf[i]);
-	 *ft_putendl(" at beginning of set_piece");
-	 */
-	while (i < PIECE_READ)
-	{
-		/*Debugging*/
-		/*ft_putchar(buf[i]); // printing pieces from chars*/
-		if (buf[i] == '\n' && i > 0)
-			row++;
-		if (buf[i] == '#')
-			piece->piece |= 1 << (i - row);
-		i++;
-	}
-	/*Debugging*/
-	/*ft_putchar(id + 'A');*/
-	/*ft_putendl(" (from chars)");*/
-	piece->weight = 0;
-	piece->id = (char)(id + 'A');
-	return (0);
-}
-
-static int	extract(t_piece *pieces, char *buf, ssize_t ret)
-{
-	size_t	total_pieces;
-	size_t	nth;
-
-	total_pieces = (ret + 1) / PIECE_READ;
-	nth = 0;
-	while (nth < total_pieces)
-	{
-		if (set_piece(&pieces[nth], &buf[nth * PIECE_READ], nth) == -1)
-			return (-1);
-		/*Debugging*/
-		print_piece_r2l(pieces[nth].piece);
-		ft_putnbr(pieces[nth].piece);
-		ft_putendl("");
-		nth++;
-	}
-	return (0);
-}
-
-/*Print n characters from string str, ending in newline*/
-/*
- *static void	ft_putendln(const char *str, size_t n)
- *{
- *    write(1, str, n);
- *    write(1, "\n", 1);
- *}
- */
 
 /*
  * Find the number of contacting blocks. This function is called for each
@@ -181,7 +82,7 @@ static int	validate_pieces(char *buf, size_t ret)
 	return (0);
 }
 
-int	extract_file(const char *file, t_piece *pieces)
+int	validate(const char *file, t_piece *pieces)
 {
 	static char	buf[MAX_READ + 1];
 	int			fd;
