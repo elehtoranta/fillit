@@ -1,9 +1,9 @@
 #!/bin/bash
 # Run this test script from './fillit/tests'
 
-BOLDRED='\e[1;31m'
-BOLDGREEN='\e[1;32m'
-RESET='\e[0m'
+BOLDRED='\033[1;31m'
+BOLDGREEN='\033[1;32m'
+RESET='\033[0m'
 
 # Update the binary
 cd .. && make && make clean && cd tests
