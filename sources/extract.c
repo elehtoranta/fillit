@@ -12,7 +12,7 @@
 
 #include <stdio.h> //remove
 #include "fillit.h"
-#include "utils.h" //remove
+#include "utils.h"
 
 /*
  *Aligns the piece to the top-left using AND operations.
@@ -29,7 +29,7 @@ static void	align_topleft(t_piece *piece)
 	while ((piece->piece & 0xFFFF000000000000L) == 0) //this WAS flipped somehow
 		piece->piece <<= BOARD_SIZE;
 	/*Debug*/
-	printf(" >> Piece aligned: %llX\n", piece->piece);
+	printf(" >> Piece aligned: %lX\n", piece->piece);
 }
 
 /*Gets the width and height of a given piece*/
@@ -84,7 +84,7 @@ static int	set_piece(t_piece *piece, char *buf, int id)
 			piece->piece |= 1L << (PIECE_SHIFT - (i % 5) - (BOARD_SIZE * row));
 		i++;
 	}
-	printf("\nPiece: %llX\t\n", piece->piece);
+	printf("\nPiece: %lX\t\n", piece->piece);
 	gui_hex(piece->piece);
 	align_topleft(piece);
 	gui_hex(piece->piece);
