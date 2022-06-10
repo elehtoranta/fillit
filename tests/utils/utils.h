@@ -12,10 +12,9 @@
 
 #ifndef UTILS_H
 # define UTILS_H
-
-#include "fillit.h"
-
+# include <stdint.h>
 //Defines for utils functions
+void	print_board(uint16_t *board);
 void	gui_hex(uint64_t piece);
 void	print_piece_r2l(uint16_t piece);
 void	print_piece_l2r(uint16_t piece);

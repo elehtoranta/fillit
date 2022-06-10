@@ -20,6 +20,30 @@
  *Utility functions to use in debugging fillit
  *Defined in fillit_utils.h
  */
+void	print_board(uint16_t *board)
+{
+	int	j;
+	int	i;
+
+	j = 0;
+	while (j < BOARD_SIZE)
+	{
+		i = MAX_SHIFT;
+		while (i >= 0)
+		{
+			/*Remember to cast the literal 1 to LONG!*/
+			if (board[j] & 1L << i)
+				printf("#");
+			else
+				printf(".");
+			i--;
+		}
+		printf("\n");
+		j++;
+	}
+	printf("\n");
+}
+
 void	gui_hex(uint64_t piece)
 {
 	int	i;

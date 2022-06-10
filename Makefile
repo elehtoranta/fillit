@@ -14,18 +14,21 @@
 ### VARIABLES ###
 ################
 
-NAME			= fillit
+BIN				= fillit
 
 SRCDIR			= sources
-SRCS			:= $(shell find $(SRCDIR) -name '*.c')
+SRCS			= file.c main.c solver.c error.c extract.c
 UTILDIR			= tests/utils
-UTILS			:= $(shell find $(UTILDIR) -name '*.c')
+UTILS			= print.c
 
+OBJDIR			= objects
 OBJS			= $(SRCS:.c=.o)
+
 CC				= clang
 CFLAGS			= -Wall -Wextra -Werror
 
-INCL			= -Isources -Itests/utils
+INCL			= ./sources/fillit.h ./tests/utils/utils.h
+INCLDIR			= -I sources/ -I tests/utils/
 
 LIB				= -lft
 LIBDIR			= -Llib
@@ -39,29 +42,32 @@ RM				= /bin/rm -rf
 
 #.SILENT:
 
-all : $(NAME)
+all : $(BIN)
 
-$(NAME) : $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBDIR) $(LIB) -o $(NAME)
-	echo "Creating binary $(NAME)."
+$(OBJDIR)/%.o : $(SRCDIR)/$(SRCS) $(UTILS) $(INCL) $(OBJDIR)
+	$(CC) $(CFLAGS) $(INCLDIR) -o $@ -c $(SRCS) $(UTILS)
 
-$(SRCDIR)/%.o : %.c
-	$(CC) $(CFLAGS) $(INCL) -c $<
+$(BIN) : $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBDIR) $(LIB) -o $(BIN)
+	echo "Creating binary $(BIN)."
 
 debug : $(OBJS)
-	$(CC) -g $(SRCS) $(INCL) $(LIBDIR) $(LIB) -o $(NAME)
-	@echo "Creating debug binary $(NAME)."
+	$(CC) -g $(OBJS) $(LIBDIR) $(LIB) -o $(BIN)
+	@echo "Creating debug binary $(BIN)."
 
-utils :
-	$(CC) -g $(SRCS) $(UTILS) $(INCL) $(LIBDIR) $(LIB) -o $(NAME)
-	@echo "Creating debug binary with test_utils $(NAME)."
+utils : $(OBJS) print.o
+	$(CC) $(OBJS) $(UTILS) $(LIBDIR) $(LIB) -o $(BIN)
+	@echo "Creating binary $(BIN) with test_utils."
+
+$(OBJDIR) :
+	-mkdir $(OBJDIR)
 
 clean :
 	$(RM) $(OBJS)
 	@echo "Cleaning object files."
 
 fclean : clean
-	$(RM) $(NAME) *.dSYM
+	$(RM) $(BIN) *.dSYM
 	@echo "Cleaning binary and debug files."
 
 re : fclean all
