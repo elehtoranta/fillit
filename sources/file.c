@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/10 14:49:48 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:31:22 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #define BYTE_BITS 8
 #define PIECE_READ 21
 #define PIECE_BLOCKS 16
-#define MAX_SHIFT 15
 
 /*
  * Find the number of contacting blocks. This function is called for each

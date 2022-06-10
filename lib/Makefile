@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/03 15:27:40 by elehtora          #+#    #+#              #
-#    Updated: 2022/06/01 19:50:34 by Erkka            ###   ########.fr        #
+#    Updated: 2022/06/10 18:49:47 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,6 +83,7 @@ SRCS		=	ft_atoi.c			\
 				ft_strstr.c			\
 				ft_strsub.c			\
 				ft_strtrim.c		\
+				ft_nat_sqrt.c		\
 				ft_tolower.c		\
 				ft_toupper.c
 
