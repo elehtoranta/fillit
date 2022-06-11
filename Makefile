@@ -17,18 +17,22 @@
 BIN				= fillit
 
 SRCDIR			= sources
-SRCS			= file.c main.c solver.c error.c extract.c
-UTILDIR			= tests/utils
-UTILS			= print.c
-
+SRCS			= \
+				error.c \
+				extract.c \
+				file.c \
+				main.c \
+				print.c \
+				solver.c
 OBJDIR			= objects
 OBJS			= $(SRCS:.c=.o)
+DIRS			= $(SRCDIR) $(OBJDIR)
 
-CC				= clang
+CC				= gcc
 CFLAGS			= -Wall -Wextra -Werror
 
-INCL			= ./sources/fillit.h ./tests/utils/utils.h
-INCLDIR			= -I sources/ -I tests/utils/
+INCL			= sources/fillit.h
+INCLDIR			= -I sources/
 
 LIB				= -lft
 LIBDIR			= -Llib
@@ -42,32 +46,25 @@ RM				= /bin/rm -rf
 
 #.SILENT:
 
-all : $(BIN)
-
-$(OBJDIR)/%.o : $(SRCDIR)/$(SRCS) $(UTILS) $(INCL) $(OBJDIR)
-	$(CC) $(CFLAGS) $(INCLDIR) -o $@ -c $(SRCS) $(UTILS)
+all : $(BIN) $(DIRS)
 
 $(BIN) : $(OBJS)
+	@echo "\033[1;32mCreating binary $(BIN).\033[0m"
 	$(CC) $(CFLAGS) $(OBJS) $(LIBDIR) $(LIB) -o $(BIN)
-	echo "Creating binary $(BIN)."
+
+%.o : $(SRCDIR)/%.c
+	$(CC) $(CFLAGS) $(INCLDIR) -c -o $@ $<
 
 debug : $(OBJS)
-	$(CC) -g $(OBJS) $(LIBDIR) $(LIB) -o $(BIN)
-	@echo "Creating debug binary $(BIN)."
-
-utils : $(OBJS) print.o
-	$(CC) $(OBJS) $(UTILS) $(LIBDIR) $(LIB) -o $(BIN)
-	@echo "Creating binary $(BIN) with test_utils."
-
-$(OBJDIR) :
-	-mkdir $(OBJDIR)
+	@echo "\033[1;32mCreating debug binary $(BIN).\033[0m"
+	$(CC) -Wall -g $(OBJS) $(LIBDIR) $(LIB) -o $(BIN)
 
 clean :
+	@echo "\033[1;32mCleaning object files.\033[0m"
 	$(RM) $(OBJS)
-	@echo "Cleaning object files."
 
 fclean : clean
+	@echo "\033[1;32mCleaning binary and debug files.\033[0m"
 	$(RM) $(BIN) *.dSYM
-	@echo "Cleaning binary and debug files."
 
 re : fclean all
