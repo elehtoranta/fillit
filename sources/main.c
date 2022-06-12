@@ -55,12 +55,19 @@
 
 int	main(int argc, char **argv)
 {
-	static t_piece	pieces[MAX_PIECES];
-	/*static uint16_t	board[BOARD_SIZE];*/
+	static t_piece	pieces[MAX_PIECES + 1];
+	static char		buf[MAX_READ + 1];
+	static uint16_t	board[BOARD_SIZE];
+	char			total_pieces;
 
 	if (argc != 2)
 		return (error(BAD_ARGS));
-	if (validate(argv[1], &pieces[0]) == -1)
+	total_pieces = validate_file(argv[1], &buf[0]);
+	if (total_pieces == -1)
+		return (-1);
+	if (extract(&pieces[0], &buf[0], total_pieces) == -1)
+		return (-1);
+	if (solve_driver(&pieces[0], &board[0], total_pieces) == -1)
 		return (-1);
 	/*
 	 *if (print_solution(&pieces[0]) == -1)

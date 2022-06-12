@@ -11,10 +11,6 @@
 /* ************************************************************************** */
 
 #include "fillit.h"
-#define MAX_READ 545
-#define BYTE_BITS 8
-#define PIECE_READ 21
-#define PIECE_BLOCKS 16
 
 /*
  * Find the number of contacting blocks. This function is called for each
@@ -81,13 +77,14 @@ static int	validate_pieces(char *buf, size_t ret)
 	return (0);
 }
 
-int	validate(const char *file, t_piece *pieces)
+int	validate_file(const char *file, char *buf)
 {
-	static char	buf[MAX_READ + 1];
-	int			fd;
-	ssize_t		ret;
+	int		fd;
+	ssize_t	ret;
+	char	total_pieces;
 
 	fd = open(file, O_RDONLY);
+	total_pieces = -1;
 	if (fd == -1)
 		return (error(OPEN_FAIL));
 	ret = read(fd, buf, MAX_READ + 1);
@@ -100,9 +97,9 @@ int	validate(const char *file, t_piece *pieces)
 		return (error(FILE_MAX));
 	if ((ret + 1) % 21 != 0)
 		return (error(FILE_FORMAT));
-	if (validate_pieces(&buf[0], ret) == -1)
+	total_pieces = (ret + 1) / 21;
+	printf("Piece count in file.c: %d\n", total_pieces);
+	if (validate_pieces(buf, ret) == -1)
 		return (-1);
-	if (extract(pieces, &buf[0], ret) == -1)
-		return (-1);
-	return (0);
+	return (total_pieces);
 }

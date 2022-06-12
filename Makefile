@@ -24,9 +24,8 @@ SRCS			= \
 				main.c \
 				print.c \
 				solver.c
-OBJDIR			= objects
 OBJS			= $(SRCS:.c=.o)
-DIRS			= $(SRCDIR) $(OBJDIR)
+DIRS			= $(SRCDIR)
 
 CC				= gcc
 CFLAGS			= -Wall -Wextra -Werror
@@ -46,18 +45,18 @@ RM				= /bin/rm -rf
 
 #.SILENT:
 
-all : $(BIN) $(DIRS)
+all : $(BIN)
 
 $(BIN) : $(OBJS)
 	@echo "\033[1;32mCreating binary $(BIN).\033[0m"
 	$(CC) $(CFLAGS) $(OBJS) $(LIBDIR) $(LIB) -o $(BIN)
 
 %.o : $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) $(INCLDIR) -c -o $@ $<
+	$(CC) -g $(INCLDIR) -c -o $@ $<
 
 debug : $(OBJS)
 	@echo "\033[1;32mCreating debug binary $(BIN).\033[0m"
-	$(CC) -Wall -g $(OBJS) $(LIBDIR) $(LIB) -o $(BIN)
+	$(CC) -g $(OBJS) $(LIBDIR) $(LIB) -o $(BIN)
 
 clean :
 	@echo "\033[1;32mCleaning object files.\033[0m"

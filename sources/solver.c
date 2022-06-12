@@ -11,42 +11,96 @@
 /* ************************************************************************** */
 
 #include "fillit.h"
-#include "utils.h"
 
-static void	toggle(t_piece *p, uint16_t *bits, uint8_t x, uint8_t y)
+static void	print_board(uint16_t *board)
 {
-	/*Replace BOARD_SIZE with dynamic size from caller*/
-	if (x < (BOARD_SIZE - p->width + 1) && y < (BOARD_SIZE - p->height + 1))
-		*(uint64_t *)&bits[y] ^= p->piece >> x;
+	int	j;
+	int	i;
+
+	j = 0;
+	while (j < BOARD_SIZE)
+	{
+		i = MAX_SHIFT;
+		while (i >= 0)
+		{
+			/*Remember to cast the literal 1 to LONG!*/
+			if (board[j] & 1L << i)
+				printf("#");
+			else
+				printf(".");
+			i--;
+		}
+		printf("\n");
+		j++;
+	}
+	printf("\n");
 }
 
-static int	what(t_piece *piece, uint16_t *board, int area)
-{
-	int	x;
-	int	y;
+/*if (piece_fits(&board[p->y], p->piece, p->x))*/
+/*toggle_place(p->piece, &board[p->y], p->x);*/
+/*toggle_place(p->piece, &board[p->y], p->x);*/
+/*
+ *static void	toggle_place(uint64_t piece, uint16_t *board, uint8_t x)
+ *{
+ *        *(uint64_t *)board ^= piece >> x;
+ *}
+ *
+ *static int	piece_fits(uint16_t *board, uint64_t piece, uint8_t x)
+ *{
+ *    return ((*(uint64_t *)board & piece >> x) == 0);
+ *}
+ */
 
-	x = 0;
-	y = 0;
-	while (piece->id)
+/*
+ *static void	update_solution()
+ *{
+ *
+ *}
+ */
+
+static int	populate(t_piece *p, uint16_t *board, int area, t_piece *root)
+{
+	if (p->id == 0)
+		return (1); // compare this to current solution
+	while (p->y + p->height <= area)
 	{
-		while (y < BOARD_SIZE)
+		while (p->x + p->width <= area)
 		{
-			if (*(uint64_t *)&board[y] & piece->piece >> x)
-				x++;
-			else
+			if ((*(uint64_t *)&board[p->y] & p->piece >> p->x) == 0)
 			{
-				toggle(piece, &board[0], x, y);
-				break;
+				*(uint64_t *)&board[p->y] ^= p->piece >> p->x;
+				if (populate(p + 1, &board[0], area, p) == 1)
+					return (1);
+				*(uint64_t *)&board[p->y] ^= p->piece >> p->x;
 			}
-			if (x + piece->width > BOARD_SIZE)
-			{
-				y++;
-				x = 0;
-			}
+			(p->x)++;
 		}
+		(p->x) = 0;
+		(p->y)++;
 	}
+	(p->x) = 0;
+	(p->y) = 0;
 	return (0);
 }
+
+/*
+ *static int	populate(t_piece *p, uint16_t *board, int area)
+ *{
+ *    t_piece *current;
+ *
+ *    if (p->id == 0)
+ *        return (1); //accept
+ *    if (!piece_fits(board, p->piece, p->x))
+ *        return (0);
+ *    current = p;
+ *    while (current)
+ *    {
+ *        populate(current, board, area);
+ *        current++;
+ *    }
+ *
+ *}
+ */
 
 /*Sorry for the bad variable names, but this is about to get tight as fuck.*/
 /*
@@ -70,19 +124,65 @@ static int	what(t_piece *piece, uint16_t *board, int area)
  */
 
 /*
+ *static void	print_board(uint16_t *board, t_piece *pieces, int area)
+ *{
+ *    int	j;
+ *    int	i;
+ *    int	nth;
+ *
+ *    nth = 0;
+ *    j = 0;
+ *    while (j < BOARD_SIZE)
+ *    {
+ *        i = MAX_SHIFT;
+ *        while (i >= 0)
+ *        {
+ *            [>Remember to cast the literal 1 to LONG!<]
+ *            if (board[j] & 1L << i)
+ *            {
+ *                while (piece)
+ *                //printf("#");
+ *            }
+ *            else
+ *                printf(".");
+ *            i--;
+ *        }
+ *        printf("\n");
+ *        j++;
+ *    }
+ *    printf("\n");
+ *}
+ */
+/*
+ *static void	print_board(uint16_t *board, t_piece *pieces)
+ *{
+ *    
+ *}
+ */
+
+/*
  *Driver for a recursive solver. Extends the solve area if a solution is not
  *found for area n - 1
  */
-int	solve_driver(t_piece *pieces, uint16_t *board, uint8_t piece_total)
+int	solve_driver(t_piece *pieces, uint16_t *board, int piece_total)
 {
 	int	area;
+	static char	solution[BOARD_SIZE * BOARD_SIZE + 1];
 
-	area = ft_nat_sqrt(piece_total * 4);
-	/*
-	 *what(pieces, board, area);
-	 *print_board(board);
-	 */
-	while (solve(pieces, board, area) != 1)
+	area = 2;
+	while (area * area < piece_total * 4)
 		area++;
+
+	/*TODO Implement the checking for each root node*/
+	while (populate(pieces, board, area) != 1 && area <= BOARD_SIZE)
+		area++;
+	printf("\nPopulated the board:\n");
+	print_board(board);
+	for (int i = 0; i < BOARD_SIZE; i++)
+		printf("%d. value in board: %hX\n", i, board[i]);
+	/*
+	 *while (solve(pieces, board, area) != 1)
+	 *    area++;
+	 */
 	return (0);
 }

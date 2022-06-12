@@ -20,12 +20,15 @@
 # include <string.h>
 # include <unistd.h>
 # include <fcntl.h>
+#include <stdio.h> //REMOVE
 
 // Constant definitions
 # define BOARD_SIZE 16
+# define MAX_READ 545
 # define MAX_PIECES 26
-# define PIECE_READ 21
 # define MAX_SHIFT 15
+# define PIECE_READ 21
+# define PIECE_BLOCKS 16
 # define PIECE_SHIFT 63
 
 // Matching error types, error descriptions are in error.c (norm)
@@ -56,8 +59,9 @@ typedef struct	s_piece
 }	t_piece;
 
 // Public function declarations
-int	validate(const char *file, t_piece *pieces);
-int	error(int errorcode);
-int	extract(t_piece *pieces, char *buf, ssize_t ret);
+int		validate_file(const char *file, char *buf);
+int		error(int errorcode);
+ssize_t	extract(t_piece *pieces, char *buf, int total_pieces);
+int		solve_driver(t_piece *pieces, uint16_t *board, int total_pieces);
 
 #endif
