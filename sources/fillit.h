@@ -24,12 +24,14 @@
 
 // Constant definitions
 # define BOARD_SIZE 16
+# define GRID_SIZE BOARD_SIZE * BOARD_SIZE
 # define MAX_READ 545
 # define MAX_PIECES 26
 # define MAX_SHIFT 15
 # define PIECE_READ 21
 # define PIECE_BLOCKS 16
 # define PIECE_SHIFT 63
+# define PIECE_BITS 64
 
 // Matching error types, error descriptions are in error.c (norm)
 typedef enum e_error
@@ -56,6 +58,7 @@ typedef struct	s_piece
 	uint8_t		height;
 	uint8_t		x;
 	uint8_t		y;
+	uint16_t	pos;
 }	t_piece;
 
 // Public function declarations

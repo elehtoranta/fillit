@@ -76,9 +76,12 @@ static int	set_piece(t_piece *piece, char *buf, char id)
 	measure_props(&props[0], buf);
 	piece->width = props[1] - props[0] + 1;
 	piece->height = props[3] - props[2] + 1;
+	piece->pos = 0;
+	/*Debug*/
 	printf("\nPiece %c width: %hu, height: %hu.\n", piece->id, piece->width, piece->height);
 	i = 0;
 	row = 3;
+	/*Debug*/
 	printf("\nThe piece in buffer:\n");
 	write(1, buf, PIECE_READ);
 	while (i < PIECE_READ)
@@ -93,11 +96,13 @@ static int	set_piece(t_piece *piece, char *buf, char id)
 			piece->piece |= 1L << (PIECE_SHIFT - (i % 5) - (BOARD_SIZE * row));
 		i++;
 	}
+	/*Debug*/
 	printf("The set piece: %lX\t\n", piece->piece);
 	gui_hex(piece->piece);
 	align_topleft(piece);
 	gui_hex(piece->piece);
 	ft_putendl("");
+	/*End*/
 	piece->x = 0;
 	piece->y = 0;
 	return (0);
