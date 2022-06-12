@@ -164,19 +164,28 @@ static int	solve(t_piece *p, uint16_t *board, int area)
  *    printf("\n");
  *}
  */
+
+static uint64_t	flip_piece(uint64_t piece)
+{
+	int	i;
+
+	i = 0;
+	while (i < PIECE_BITS)
+}
+
 /*https://stackoverflow.com/questions/4816322/mapping-x-y-to-single-number-value*/
 static void	print_solution(uint16_t *board, t_piece *p, char *solution, int area)
 {
 	uint8_t		x;
 	uint8_t		y;
 	uint8_t		block;
-	uint16_t	i;
+	uint8_t		offset;
 
 	while (p->id != 0)
 	{
-		printf("Position for id %c: %hu\n", p->id, p->pos);
 		x = (uint8_t)(p->pos >> 8);
 		y = (uint8_t)(p->pos & 0xff);
+		printf("Position for id %c: %hu\n", p->id, p->pos);
 		printf("X for id %c: %hu\n", p->id, x);
 		printf("Y for id %c: %hu\n", p->id, y);
 
@@ -186,20 +195,23 @@ static void	print_solution(uint16_t *board, t_piece *p, char *solution, int area
 		block = 0;
 		while (block < PIECE_BITS)
 		{
-			if (block % 4 == 0)
-				block += (BOARD_SIZE - 4); //jump to x0, y+1
-			if (p->piece & 1 << block)
-				solution[x + (y * BOARD_SIZE)] = p->id;
+			/*block = BOARD_SIZE * i; //jump to x0, y+1*/
+			if (p->piece & 1L << (PIECE_SHIFT - block))
+			{
+				offset = (block % BOARD_SIZE) + (BOARD_SIZE * (block / BOARD_SIZE));
+				solution[x + (y * BOARD_SIZE) + offset] = p->id;
+			}
 			block++;
 		}
 		p++;
 	}
-	i = 0;
-	while (i < area)
+	ft_putendl("");
+	offset = 0;
+	while (offset < area)
 	{
-		ft_putmem(solution + (i * BOARD_SIZE), area);
+		ft_putmem(solution + (offset * BOARD_SIZE), area);
 		ft_putendl("");
-		i++;
+		offset++;
 	}
 }
 
