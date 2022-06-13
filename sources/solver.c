@@ -61,34 +61,31 @@ static void	print_board(uint16_t *board)
 
 static int	solve(t_piece *p, uint16_t *board, int area)
 {
-	uint8_t	x;
-	uint8_t	y;
-
-	x = 0;
-	y = 0;
 	if (p->id == 0)
 		return (1);
 	/*while (p->id != 0)*/
 	/*{*/
-	while (y + p->height <= area)
+	while (p->y + p->height <= area)
 	{
-		while (x + p->width <= area)
+		while (p->x + p->width <= area)
 		{
-			if ((*(uint64_t *)&board[y] & p->piece >> x) == 0)
+			if ((*(uint64_t *)&board[p->y] & p->piece >> p->x) == 0)
 			{
-				*(uint64_t *)&board[y] ^= p->piece >> x;
+				*(uint64_t *)&board[p->y] ^= p->piece >> p->x;
 				/*https://stackoverflow.com/questions/4816322/mapping-x-y-to-single-number-value*/
-				p->pos = ((uint16_t) x) << 8 | y;
+				p->pos = ((uint16_t) p->x) << 8 | p->y;
 				if (solve(p + 1, &board[0], area) == 1)
 					return (1);
-				*(uint64_t *)&board[y] ^= p->piece >> x;
+				*(uint64_t *)&board[p->y] ^= p->piece >> p->x;
 				p->pos = 0;
 			}
-			(x)++;
+			(p->x)++;
 		}
-		(x) = 0;
-		(y)++;
+		(p->x) = 0;
+		(p->y)++;
 	}
+	p->x = 0;
+	p->y = 0;
 		/*p++;*/
 	/*}*/
 	return (0);
@@ -165,20 +162,22 @@ static int	solve(t_piece *p, uint16_t *board, int area)
  *}
  */
 
-static uint64_t	flip_piece(uint64_t piece)
-{
-	int	i;
-
-	i = 0;
-	while (i < PIECE_BITS)
-}
+/*
+ *static uint64_t	flip_piece(uint64_t piece)
+ *{
+ *    int	i;
+ *
+ *    i = 0;
+ *    while (i < PIECE_BITS)
+ *}
+ */
 
 /*https://stackoverflow.com/questions/4816322/mapping-x-y-to-single-number-value*/
 static void	print_solution(uint16_t *board, t_piece *p, char *solution, int area)
 {
 	uint8_t		x;
 	uint8_t		y;
-	uint8_t		block;
+	uint8_t		shift;
 	uint8_t		offset;
 
 	while (p->id != 0)
@@ -190,28 +189,39 @@ static void	print_solution(uint16_t *board, t_piece *p, char *solution, int area
 		printf("Y for id %c: %hu\n", p->id, y);
 
 		/*Align with top*/
-		while ((p->piece & 0xFFFF000000000000L) == 0)
-			p->piece <<= BOARD_SIZE;
-		block = 0;
-		while (block < PIECE_BITS)
+		/*
+		 *while ((p->piece & 0xFFFF000000000000L) == 0)
+		 *    p->piece <<= BOARD_SIZE;
+		 */
+		shift = 15;
+		while (shift < PIECE_BITS)
 		{
-			/*block = BOARD_SIZE * i; //jump to x0, y+1*/
-			if (p->piece & 1L << (PIECE_SHIFT - block))
+			while (shift % 16 != 0)
 			{
-				offset = (block % BOARD_SIZE) + (BOARD_SIZE * (block / BOARD_SIZE));
-				solution[x + (y * BOARD_SIZE) + offset] = p->id;
+				/*printf("%hu ", shift);*/
+				if (p->piece & (1L << shift))
+				{
+					offset = 15 - (shift % 16);
+					printf("INSIDE, shift: %hu, x: %hu, y: %hu, offset: %hu\n", shift, p->x, p->y, offset);
+					/*solution[ (p->y * 16) + ((3 - (shift / 16)) * 16) + (p->x + (16 - (shift % 16))) ] = p->id;*/
+					printf("Solution placement at %hu\n", p->y * 16 + (shift - (shift % 16)) + p->x + offset);
+					solution[ (p->y * 16 + (shift - (shift % 16))) + p->x + offset ] = p->id;
+					/*printf("%d\n", p->y * 16 + p->x + (shift - (shift % 16)));*/
+					/*printf("ROW %d\n", (3 - (shift / 16)) * 16); // row*/
+				}
+				shift--;
 			}
-			block++;
+			shift += 31;
 		}
 		p++;
 	}
 	ft_putendl("");
-	offset = 0;
-	while (offset < area)
+	shift = 0;
+	while (shift < area)
 	{
-		ft_putmem(solution + (offset * BOARD_SIZE), area);
+		ft_putmem(solution + (shift * BOARD_SIZE), area);
 		ft_putendl("");
-		offset++;
+		shift++;
 	}
 }
 
