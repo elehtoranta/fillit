@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 12:40:34 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/10 18:26:37 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/13 13:53:24 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	align_topleft(t_piece *piece)
 	while ((piece->piece & 0xFFFFL) == 0) //this IS REflipped somehow
 		piece->piece >>= BOARD_SIZE;
 	/*Debug*/
-	printf(" >> Piece aligned: %lX\n", piece->piece);
+	printf(" >> Piece aligned: %llX\n", piece->piece);
 }
 
 /*Gets the width and height of a given piece*/
@@ -78,7 +78,7 @@ static int	set_piece(t_piece *piece, char *buf, char id)
 	piece->height = props[3] - props[2] + 1;
 	piece->pos = 0;
 	/*Debug*/
-	printf("\nPiece %c width: %hu, height: %hu.\n", piece->id, piece->width, piece->height);
+	printf("\nPiece %c width: %hhu, height: %hhu.\n", piece->id, piece->width, piece->height);
 	i = 0;
 	row = 3;
 	/*Debug*/
@@ -97,7 +97,7 @@ static int	set_piece(t_piece *piece, char *buf, char id)
 		i++;
 	}
 	/*Debug*/
-	printf("The set piece: %lX\t\n", piece->piece);
+	printf("The set piece: %llX\t\n", piece->piece);
 	gui_hex(piece->piece);
 	align_topleft(piece);
 	gui_hex(piece->piece);

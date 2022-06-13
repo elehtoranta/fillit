@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 11:41:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/10 19:24:17 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/13 13:55:13 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,8 +185,8 @@ static void	print_solution(uint16_t *board, t_piece *p, char *solution, int area
 		x = (uint8_t)(p->pos >> 8);
 		y = (uint8_t)(p->pos & 0xff);
 		printf("Position for id %c: %hu\n", p->id, p->pos);
-		printf("X for id %c: %hu\n", p->id, x);
-		printf("Y for id %c: %hu\n", p->id, y);
+		printf("X for id %c: %hhu\n", p->id, x);
+		printf("Y for id %c: %hhu\n", p->id, y);
 
 		/*Align with top*/
 		/*
@@ -198,13 +198,13 @@ static void	print_solution(uint16_t *board, t_piece *p, char *solution, int area
 		{
 			while (shift % 16 != 0)
 			{
-				/*printf("%hu ", shift);*/
+				/*printf("%hhu ", shift);*/
 				if (p->piece & (1L << shift))
 				{
 					offset = 15 - (shift % 16);
-					printf("INSIDE, shift: %hu, x: %hu, y: %hu, offset: %hu\n", shift, p->x, p->y, offset);
+					printf("INSIDE, shift: %hhu, x: %hhu, y: %hhu, offset: %hhu\n", shift, p->x, p->y, offset);
 					/*solution[ (p->y * 16) + ((3 - (shift / 16)) * 16) + (p->x + (16 - (shift % 16))) ] = p->id;*/
-					printf("Solution placement at %hu\n", p->y * 16 + (shift - (shift % 16)) + p->x + offset);
+					printf("Solution placement at %d\n", p->y * 16 + (shift - (shift % 16)) + p->x + offset);
 					solution[ (p->y * 16 + (shift - (shift % 16))) + p->x + offset ] = p->id;
 					/*printf("%d\n", p->y * 16 + p->x + (shift - (shift % 16)));*/
 					/*printf("ROW %d\n", (3 - (shift / 16)) * 16); // row*/
