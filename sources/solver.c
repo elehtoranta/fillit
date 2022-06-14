@@ -63,8 +63,8 @@ static int	solve(t_piece *p, uint16_t *board, int area)
 {
 	if (p->id == 0)
 		return (1);
-	/*while (p->id != 0)*/
-	/*{*/
+	if (p->pos != 0x8000)
+		return (0);
 	while (p->y + p->height <= area)
 	{
 		while (p->x + p->width <= area)
@@ -77,7 +77,8 @@ static int	solve(t_piece *p, uint16_t *board, int area)
 				if (solve(p + 1, &board[0], area) == 1)
 					return (1);
 				*(uint64_t *)&board[p->y] ^= p->piece >> p->x;
-				p->pos = 0;
+				p->pos = 0x8000;
+				return (0);
 			}
 			(p->x)++;
 		}
@@ -86,8 +87,8 @@ static int	solve(t_piece *p, uint16_t *board, int area)
 	}
 	p->x = 0;
 	p->y = 0;
-		/*p++;*/
-	/*}*/
+	printf("Area: %d\n", area);
+	print_board(board);
 	return (0);
 }
 
@@ -154,7 +155,7 @@ static int	solve(t_piece *p, uint16_t *board, int area)
  *            else
  *                printf(".");
  *            i--;
-        }
+ }
  *        printf("\n");
  *        j++;
  *    }
@@ -184,9 +185,9 @@ static void	print_solution(uint16_t *board, t_piece *p, char *solution, int area
 	{
 		x = (uint8_t)(p->pos >> 8);
 		y = (uint8_t)(p->pos & 0xff);
-		printf("Position for id %c: %hu\n", p->id, p->pos);
-		printf("X for id %c: %hhu\n", p->id, x);
-		printf("Y for id %c: %hhu\n", p->id, y);
+		/*printf("Position for id %c: %hu\n", p->id, p->pos);*/
+		/*printf("X for id %c: %hhu\n", p->id, x);*/
+		/*printf("Y for id %c: %hhu\n", p->id, y);*/
 
 		/*Align with top*/
 		/*
@@ -202,9 +203,9 @@ static void	print_solution(uint16_t *board, t_piece *p, char *solution, int area
 				if (p->piece & (1L << shift))
 				{
 					offset = 15 - (shift % 16);
-					printf("INSIDE, shift: %hhu, x: %hhu, y: %hhu, offset: %hhu\n", shift, p->x, p->y, offset);
+					/*printf("INSIDE, shift: %hhu, x: %hhu, y: %hhu, offset: %hhu\n", shift, p->x, p->y, offset);*/
 					/*solution[ (p->y * 16) + ((3 - (shift / 16)) * 16) + (p->x + (16 - (shift % 16))) ] = p->id;*/
-					printf("Solution placement at %d\n", p->y * 16 + (shift - (shift % 16)) + p->x + offset);
+					/*printf("Solution placement at %d\n", p->y * 16 + (shift - (shift % 16)) + p->x + offset);*/
 					solution[ (p->y * 16 + (shift - (shift % 16))) + p->x + offset ] = p->id;
 					/*printf("%d\n", p->y * 16 + p->x + (shift - (shift % 16)));*/
 					/*printf("ROW %d\n", (3 - (shift / 16)) * 16); // row*/
@@ -241,7 +242,8 @@ int	solve_driver(t_piece *pieces, uint16_t *board, int piece_total)
 	while (area * area < piece_total * 4)
 		area++;
 
-	/*TODO Implement the checking for each root node*/
+	/*TODO Implement the checking for each root node??*/
+	/*TODO Flush board and N->pos between every area increment*/
 	while (solve(pieces, board, area) != 1 && area <= BOARD_SIZE)
 		area++;
 	printf("\nPopulated the board:\n");

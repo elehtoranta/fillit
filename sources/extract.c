@@ -31,7 +31,7 @@ static void	align_topleft(t_piece *piece)
 	while ((piece->piece & 0xFFFFL) == 0) //this IS REflipped somehow
 		piece->piece >>= BOARD_SIZE;
 	/*Debug*/
-	printf(" >> Piece aligned: %llX\n", piece->piece);
+	/*printf(" >> Piece aligned: %llX\n", piece->piece);*/
 }
 
 /*Gets the width and height of a given piece*/
@@ -60,8 +60,8 @@ static void	measure_props(uint8_t *props, const char *buf)
 		i++;
 	}
 	/*Debug*/
-	for (int j = 0; j < 4; j++)
-		printf("%d", (int)props[j]);
+	/*for (int j = 0; j < 4; j++)*/
+		/*printf("%d", (int)props[j]);*/
 	/*End*/
 }
 
@@ -76,14 +76,14 @@ static int	set_piece(t_piece *piece, char *buf, char id)
 	measure_props(&props[0], buf);
 	piece->width = props[1] - props[0] + 1;
 	piece->height = props[3] - props[2] + 1;
-	piece->pos = 0;
+	piece->pos = 0x8000;
 	/*Debug*/
-	printf("\nPiece %c width: %hhu, height: %hhu.\n", piece->id, piece->width, piece->height);
+	/*printf("\nPiece %c width: %hhu, height: %hhu.\n", piece->id, piece->width, piece->height);*/
 	i = 0;
 	row = 3;
 	/*Debug*/
-	printf("\nThe piece in buffer:\n");
-	write(1, buf, PIECE_READ);
+	/*printf("\nThe piece in buffer:\n");*/
+	/*write(1, buf, PIECE_READ);*/
 	while (i < PIECE_READ)
 	{
 		if (i % 5 == 0 && i > 0)
@@ -97,11 +97,11 @@ static int	set_piece(t_piece *piece, char *buf, char id)
 		i++;
 	}
 	/*Debug*/
-	printf("The set piece: %llX\t\n", piece->piece);
-	gui_hex(piece->piece);
+	/*printf("The set piece: %llX\t\n", piece->piece);*/
+	/*gui_hex(piece->piece);*/
 	align_topleft(piece);
-	gui_hex(piece->piece);
-	ft_putendl("");
+	/*gui_hex(piece->piece);*/
+	/*ft_putendl("");*/
 	/*End*/
 	piece->x = 0;
 	piece->y = 0;
