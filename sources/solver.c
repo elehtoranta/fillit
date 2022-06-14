@@ -23,7 +23,6 @@ static void	print_board(uint16_t *board)
 		i = MAX_SHIFT;
 		while (i >= 0)
 		{
-			/*Remember to cast the literal 1 to LONG!*/
 			if (board[j] & 1L << i)
 				printf("#");
 			else
@@ -36,142 +35,39 @@ static void	print_board(uint16_t *board)
 	printf("\n");
 }
 
-/*if (piece_fits(&board[p->y], p->piece, p->x))*/
-/*toggle_place(p->piece, &board[p->y], p->x);*/
-/*toggle_place(p->piece, &board[p->y], p->x);*/
-/*
- *static void	toggle_place(uint64_t piece, uint16_t *board, uint8_t x)
- *{
- *        *(uint64_t *)board ^= piece >> x;
- *}
- *
- *static int	piece_fits(uint16_t *board, uint64_t piece, uint8_t x)
- *{
- *    return ((*(uint64_t *)board & piece >> x) == 0);
- *}
- */
-
-/*
- *static void	update_solution()
- *{
- *
- *}
- */
-
-
 static int	solve(t_piece *p, uint16_t *board, int area)
 {
+	uint8_t	x;
+	uint8_t	y;
+
+	x = 0;
+	y = 0;
 	if (p->id == 0)
 		return (1);
-	if (p->pos != 0x8000)
-		return (0);
-	while (p->y + p->height <= area)
+	/*print_board(board);*/
+	while (y + p->height <= area)
 	{
-		while (p->x + p->width <= area)
+		while (x + p->width <= area)
 		{
-			if ((*(uint64_t *)&board[p->y] & p->piece >> p->x) == 0)
+			if ((*(uint64_t *)&board[y] & p->piece >> x) == 0)
 			{
-				*(uint64_t *)&board[p->y] ^= p->piece >> p->x;
-				/*https://stackoverflow.com/questions/4816322/mapping-x-y-to-single-number-value*/
-				p->pos = ((uint16_t) p->x) << 8 | p->y;
-				if (solve(p + 1, &board[0], area) == 1)
+				*(uint64_t *)&board[y] ^= p->piece >> x;
+				p->pos = ((uint16_t) x) << 8 | y;
+				if (solve(p + 1, board, area) == 1)
 					return (1);
-				*(uint64_t *)&board[p->y] ^= p->piece >> p->x;
+				*(uint64_t *)&board[y] ^= p->piece >> x;
 				p->pos = 0x8000;
-				return (0);
+				/*return (0);*/
 			}
-			(p->x)++;
+			(x)++;
 		}
-		(p->x) = 0;
-		(p->y)++;
+		(x) = 0;
+		(y)++;
 	}
-	p->x = 0;
-	p->y = 0;
-	printf("Area: %d\n", area);
-	print_board(board);
+	/*printf("Area: %d\n", area);*/
+	/*print_board(board);*/
 	return (0);
 }
-
-/*
- *static int	populate(t_piece *p, uint16_t *board, int area)
- *{
- *    t_piece *current;
- *
- *    if (p->id == 0)
- *        return (1); //accept
- *    if (!piece_fits(board, p->piece, p->x))
- *        return (0);
- *    current = p;
- *    while (current)
- *    {
- *        populate(current, board, area);
- *        current++;
- *    }
- *
- *}
- */
-
-/*Sorry for the bad variable names, but this is about to get tight as fuck.*/
-/*
- *static int	solve(t_piece *p, uint16_t *b, uint8_t area, t_piece *prev)
- *{
- *    [>Accept<]
- *    if (p->id == 0)
- *        return (1);
- *    if (solve(pieces, board, area) == 1)
- *        update_solution();
- *
- *    while (p->y + p->height < area)
- *    {
- *        while (*(uint64_t *)&b[p->y] & (p->piece >> p->x))
- *        {
- *            
- *        }
- *        *(uint64_t *)&b[p->y] ^= //
- *    }
- *}
- */
-
-/*
- *static void	print_board(uint16_t *board, t_piece *pieces, int area)
- *{
- *    int	j;
- *    int	i;
- *    int	nth;
- *
- *    nth = 0;
- *    j = 0;
- *    while (j < BOARD_SIZE)
- *    {
- *        i = MAX_SHIFT;
- *        while (i >= 0)
- *        {
- *            [>Remember to cast the literal 1 to LONG!<]
- *            if (board[j] & 1L << i)
- *            {
- *                while (piece)
- *                //printf("#");
- *            }
- *            else
- *                printf(".");
- *            i--;
- }
- *        printf("\n");
- *        j++;
- *    }
- *    printf("\n");
- *}
- */
-
-/*
- *static uint64_t	flip_piece(uint64_t piece)
- *{
- *    int	i;
- *
- *    i = 0;
- *    while (i < PIECE_BITS)
- *}
- */
 
 /*https://stackoverflow.com/questions/4816322/mapping-x-y-to-single-number-value*/
 static void	print_solution(uint16_t *board, t_piece *p, char *solution, int area)
@@ -203,11 +99,11 @@ static void	print_solution(uint16_t *board, t_piece *p, char *solution, int area
 				if (p->piece & (1L << shift))
 				{
 					offset = 15 - (shift % 16);
-					/*printf("INSIDE, shift: %hhu, x: %hhu, y: %hhu, offset: %hhu\n", shift, p->x, p->y, offset);*/
-					/*solution[ (p->y * 16) + ((3 - (shift / 16)) * 16) + (p->x + (16 - (shift % 16))) ] = p->id;*/
-					/*printf("Solution placement at %d\n", p->y * 16 + (shift - (shift % 16)) + p->x + offset);*/
-					solution[ (p->y * 16 + (shift - (shift % 16))) + p->x + offset ] = p->id;
-					/*printf("%d\n", p->y * 16 + p->x + (shift - (shift % 16)));*/
+					/*printf("INSIDE, shift: %hhu, x: %hhu, y: %hhu, offset: %hhu\n", shift, x, y, offset);*/
+					/*solution[ (y * 16) + ((3 - (shift / 16)) * 16) + (x + (16 - (shift % 16))) ] = p->id;*/
+					/*printf("Solution placement at %d\n", y * 16 + (shift - (shift % 16)) + x + offset);*/
+					solution[ (y * 16 + (shift - (shift % 16))) + x + offset ] = p->id;
+					/*printf("%d\n", y * 16 + x + (shift - (shift % 16)));*/
 					/*printf("ROW %d\n", (3 - (shift / 16)) * 16); // row*/
 				}
 				shift--;
