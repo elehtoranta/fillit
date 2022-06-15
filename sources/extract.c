@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 12:40:34 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/13 13:53:24 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:48:02 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 #include "utils.h"
 
 /*
- *Aligns the piece to the top-left using AND operations.
+ *Aligns the piece to the bottom-left using AND operations.
  *The checking is made with a number representing a full
- *column at the left border and a full row at the top, and
+ *column at the left border and a full row at the bottom, and
  *shifting piece while those values do not overlap.
  *
- *NOTE: now this aligns to the BOTTOM LEFT, since the pieces
+ *NOTE: this aligns to the BOTTOM left, since the pieces
  *evidently get flipped again in the solver.
  */
-static void	align_topleft(t_piece *piece)
+static void	align_bottomleft(t_piece *piece)
 {
 	/*Align with left side*/
 	while ((piece->piece & 0x8000800080008000L) == 0)
@@ -76,7 +76,7 @@ static int	set_piece(t_piece *piece, char *buf, char id)
 	measure_props(&props[0], buf);
 	piece->width = props[1] - props[0] + 1;
 	piece->height = props[3] - props[2] + 1;
-	piece->pos = 0x8000;
+	piece->pos = NOT_PLACED;
 	/*Debug*/
 	/*printf("\nPiece %c width: %hhu, height: %hhu.\n", piece->id, piece->width, piece->height);*/
 	i = 0;
@@ -99,12 +99,10 @@ static int	set_piece(t_piece *piece, char *buf, char id)
 	/*Debug*/
 	/*printf("The set piece: %llX\t\n", piece->piece);*/
 	/*gui_hex(piece->piece);*/
-	align_topleft(piece);
+	align_bottomleft(piece);
 	/*gui_hex(piece->piece);*/
 	/*ft_putendl("");*/
 	/*End*/
-	piece->x = 0;
-	piece->y = 0;
 	return (0);
 }
 

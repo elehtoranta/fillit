@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 11:41:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/13 13:55:13 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:39:18 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,12 @@ static int	solve(t_piece *p, uint16_t *board, int area)
 	uint8_t	x;
 	uint8_t	y;
 
-	x = 0;
-	y = 0;
+	/*if ( && reject(board, p) )*/
+		/*return (0);*/
 	if (p->id == 0)
 		return (1);
-	/*print_board(board);*/
+	x = 0;
+	y = 0;
 	while (y + p->height <= area)
 	{
 		while (x + p->width <= area)
@@ -56,16 +57,13 @@ static int	solve(t_piece *p, uint16_t *board, int area)
 				if (solve(p + 1, board, area) == 1)
 					return (1);
 				*(uint64_t *)&board[y] ^= p->piece >> x;
-				p->pos = 0x8000;
-				/*return (0);*/
+				p->pos = NOT_PLACED;
 			}
-			(x)++;
+			x++;
 		}
-		(x) = 0;
-		(y)++;
+		x = 0;
+		y++;
 	}
-	/*printf("Area: %d\n", area);*/
-	/*print_board(board);*/
 	return (0);
 }
 
@@ -138,10 +136,12 @@ int	solve_driver(t_piece *pieces, uint16_t *board, int piece_total)
 	while (area * area < piece_total * 4)
 		area++;
 
-	/*TODO Implement the checking for each root node??*/
 	/*TODO Flush board and N->pos between every area increment*/
 	while (solve(pieces, board, area) != 1 && area <= BOARD_SIZE)
+	{
+		ft_bzero(board, 2 * BOARD_SIZE);
 		area++;
+	}
 	printf("\nPopulated the board:\n");
 	print_board(board);
 	for (int i = 0; i < BOARD_SIZE; i++)

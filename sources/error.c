@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 21:30:30 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/10 14:46:29 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:38:53 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	error(int errorcode)
 {
 	const char	*error_messages[ERROR_MESSAGES];
 
-	error_messages[0] = "Number of arguments was not 1.";
+	error_messages[0] = "usage: ./fillit <path/to/test/file>";
 	error_messages[1] = "Opening file failed.";
 	error_messages[2] = "Reading file failed.";
 	error_messages[3] = "File is too long.";

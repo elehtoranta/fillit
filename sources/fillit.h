@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:28:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/10 18:10:04 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:42:13 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@
 # define PIECE_SHIFT 63
 # define PIECE_BITS 64
 
+//Hex constants
+# define NOT_PLACED 0x8000
+
 // Matching error types, error descriptions are in error.c (norm)
 typedef enum e_error
 {
@@ -56,8 +59,6 @@ typedef struct	s_piece
 	char		id;
 	uint8_t		width;
 	uint8_t		height;
-	uint8_t		x;
-	uint8_t		y;
 	uint16_t	pos;
 }	t_piece;
 
