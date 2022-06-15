@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 12:40:34 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/15 10:48:02 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/15 14:02:13 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,10 @@
  */
 static void	align_bottomleft(t_piece *piece)
 {
-	/*Align with left side*/
 	while ((piece->piece & 0x8000800080008000L) == 0)
 		piece->piece <<= 1;
-	/*Align with top*/
-	while ((piece->piece & 0xFFFFL) == 0) //this IS REflipped somehow
+	while ((piece->piece & 0xFFFFL) == 0)
 		piece->piece >>= BOARD_SIZE;
-	/*Debug*/
-	/*printf(" >> Piece aligned: %llX\n", piece->piece);*/
 }
 
 /*Gets the width and height of a given piece*/
@@ -39,10 +35,10 @@ static void	measure_props(uint8_t *props, const char *buf)
 {
 	uint8_t	i;
 
-	props[0] = 3; //x min
-	props[1] = 0; //x max
-	props[2] = 3; //y min
-	props[3] = 0; //y max
+	props[0] = 3;
+	props[1] = 0;
+	props[2] = 3;
+	props[3] = 0;
 	i = 0;
 	while (i < PIECE_READ)
 	{
@@ -59,13 +55,9 @@ static void	measure_props(uint8_t *props, const char *buf)
 		}
 		i++;
 	}
-	/*Debug*/
-	/*for (int j = 0; j < 4; j++)*/
-		/*printf("%d", (int)props[j]);*/
-	/*End*/
 }
 
-// Takes the starting index of the piece as parameter 'buf'
+/*Takes the starting index of the piece as parameter 'buf'*/
 static int	set_piece(t_piece *piece, char *buf, char id)
 {
 	uint8_t	i;
@@ -77,32 +69,17 @@ static int	set_piece(t_piece *piece, char *buf, char id)
 	piece->width = props[1] - props[0] + 1;
 	piece->height = props[3] - props[2] + 1;
 	piece->pos = NOT_PLACED;
-	/*Debug*/
-	/*printf("\nPiece %c width: %hhu, height: %hhu.\n", piece->id, piece->width, piece->height);*/
 	i = 0;
 	row = 3;
-	/*Debug*/
-	/*printf("\nThe piece in buffer:\n");*/
-	/*write(1, buf, PIECE_READ);*/
 	while (i < PIECE_READ)
 	{
 		if (i % 5 == 0 && i > 0)
 			row--;
-		/*
-		 *The pieces are placed upside down, because the cast of board to uint64_t
-		 *causes them to flip again. e.g. the pieces flip twice during execution.
-		 */
 		if (buf[i] == '#')
 			piece->piece |= 1L << (PIECE_SHIFT - (i % 5) - (BOARD_SIZE * row));
 		i++;
 	}
-	/*Debug*/
-	/*printf("The set piece: %llX\t\n", piece->piece);*/
-	/*gui_hex(piece->piece);*/
 	align_bottomleft(piece);
-	/*gui_hex(piece->piece);*/
-	/*ft_putendl("");*/
-	/*End*/
 	return (0);
 }
 
@@ -111,7 +88,6 @@ ssize_t	extract(t_piece *pieces, char *buf, int total_pieces)
 	int	nth;
 
 	nth = 0;
-	printf("Count of pieces: %d\n", total_pieces);
 	while (nth < total_pieces)
 	{
 		if (set_piece(&pieces[nth], &buf[nth * PIECE_READ], nth + 'A') == -1)

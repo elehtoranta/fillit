@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/15 13:55:45 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/15 13:58:25 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@
  */
 static int	count_contacts(const char *buf, size_t i, size_t contacts)
 {
-	if (i >= 5 && *(buf - 5) == '#') //up
+	if (i >= 5 && *(buf - 5) == '#')
 		contacts++;
-	if (i % 5 < 4 && *(buf + 1) == '#') //right
+	if (i % 5 < 4 && *(buf + 1) == '#')
 		contacts++;
-	if (i < 15 && *(buf + 5) == '#') //down
+	if (i < 15 && *(buf + 5) == '#')
 		contacts++;
-	if (i % 5 > 0 && *(buf - 1) == '#') //left
+	if (i % 5 > 0 && *(buf - 1) == '#')
 		contacts++;
 	return (contacts);
 }
@@ -41,7 +41,6 @@ static int	is_good_piece(char *buf, size_t hashes, size_t contacts)
 	i = 0;
 	while (i < PIECE_READ - 1)
 	{
-		/*ft_putchar(buf[i]); //debug*/
 		if (i % 5 < 4 && (buf[i] != '#' && buf[i] != '.'))
 			return (error(BAD_PIECE_FORMAT));
 		if (i % 5 == 4 && buf[i] != '\n')
@@ -68,9 +67,8 @@ static int	validate_pieces(char *buf, size_t ret)
 	while (i < ret)
 	{
 		if (is_good_piece(&buf[i], 0, 0) == -1)
-				return (-1);
+			return (-1);
 		i += PIECE_READ;
-		/*checking 20th index 'per piece' for separating newline*/
 		if (buf[i - 1] != '\n' && i < ret && i > 0)
 			return (error(MISSING_NEWLINE));
 	}
@@ -98,7 +96,6 @@ int	validate_file(const char *file, char *buf)
 	if ((ret + 1) % 21 != 0)
 		return (error(FILE_FORMAT));
 	total_pieces = (ret + 1) / 21;
-	printf("Piece count in file.c: %d\n", total_pieces);
 	if (validate_pieces(buf, ret) == -1)
 		return (-1);
 	return (total_pieces);
