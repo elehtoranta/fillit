@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:28:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/15 16:16:10 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/15 16:19:56 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 /* Including user created headers for get_next_line and 42 library */
 # include "../lib/libft.h"
 # include <stdint.h>
-//# include <string.h>
 # include <unistd.h>
 # include <fcntl.h>
 
