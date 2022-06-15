@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 11:41:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/15 14:20:01 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/15 14:42:49 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	print_solution(char *solution, int area)
 	}
 }
 
-static void	set_solution(uint16_t *board, t_piece *p, char *s, int area)
+static void	set_solution(t_piece *p, char *s)
 {
 	uint8_t		x;
 	uint8_t		y;
@@ -52,7 +52,6 @@ static void	set_solution(uint16_t *board, t_piece *p, char *s, int area)
 		}
 		p++;
 	}
-	print_solution(s, area);
 }
 
 static int	solve(t_piece *p, uint16_t *board, int area, uint8_t x)
@@ -101,6 +100,7 @@ int	solve_driver(t_piece *pieces, uint16_t *board, int piece_total)
 		ft_bzero(board, 2 * BOARD_SIZE);
 		area++;
 	}
-	set_solution(board, pieces, &solution[0], area);
+	set_solution(pieces, &solution[0]);
+	print_solution(&solution[0], area);
 	return (0);
 }

@@ -6,12 +6,11 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 12:40:34 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/15 14:02:13 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/15 14:23:19 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
-#include "utils.h"
 
 /*
  *Aligns the piece to the bottom-left using AND operations.
