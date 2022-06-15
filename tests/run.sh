@@ -15,7 +15,7 @@ if [[ -z ${1+x} || $1 = 'v' || $1 = 'a' ]]; then
 	for file in $TEST_VALID;
 	do
 		echo -e "Testing ${file#${TEST_VALID}} from ${TEST_VALID%/*}:"
-		../fillit $file #| grep --color='auto' ERROR
+		time ../fillit $file #| grep --color='auto' ERROR
 	done
 fi
 

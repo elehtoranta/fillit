@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:28:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/15 14:31:26 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/15 16:16:10 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,9 @@
 
 // Constant definitions
 # define BOARD_SIZE 16
-# define GRID_SIZE 256
 # define MAX_READ 545
 # define MAX_PIECES 26
-# define MAX_SHIFT 15
 # define PIECE_READ 21
-# define PIECE_BLOCKS 16
 # define PIECE_SHIFT 63
 # define PIECE_BITS 64 //check these
 
