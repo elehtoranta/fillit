@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:28:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/16 15:53:33 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/16 16:48:12 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define FILLIT_H
 
 /* Including user created headers for get_next_line and 42 library */
-# include "../lib/libft.h"
+# include "../libft/libft.h"
 # include <stdint.h>
 # include <unistd.h>
 # include <fcntl.h>

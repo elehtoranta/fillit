@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/18 15:59:06 by elehtora          #+#    #+#              #
-#    Updated: 2022/06/15 16:29:57 by elehtora         ###   ########.fr        #
+#    Updated: 2022/06/16 16:59:33 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ INCL			= sources/fillit.h
 INCLDIR			= sources
 
 LIB				= ft
-LIBDIR			= lib
+LIBDIR			= libft
 LIB_BIN			= libft.a
 
 RM				= /bin/rm -rf
@@ -61,7 +61,7 @@ $(NAME) : $(OBJS) $(LIBDIR)/$(LIB_BIN)
 	$(CC) $(CFLAGS) -I$(INCLDIR) -c -o $@ $<
 
 $(LIBDIR)/$(LIB_BIN) :
-	@echo "${G}" ; make -C lib
+	@echo "${G}" ; make -C $(LIBDIR)
 
 debug : $(OBJS)
 	@echo "\033[1;32mCreating debug binary $(NAME).\033[0m"
@@ -70,12 +70,12 @@ debug : $(OBJS)
 clean :
 	@echo "\033[1;32mCleaning object files.\033[0m"
 	$(RM) $(OBJS)
-	make clean -C lib
+	make clean -C $(LIBDIR)
 
 fclean : clean
 	@echo "\033[1;32mCleaning binary and debug files.\033[0m"
 	$(RM) $(NAME) *.dSYM
-	make fclean -C lib
+	make fclean -C $(LIBDIR)
 
 re : fclean all
 
