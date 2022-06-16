@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:28:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/15 16:19:56 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/16 15:53:33 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,12 @@
 # define MAX_PIECES 26
 # define PIECE_READ 21
 # define PIECE_SHIFT 63
-# define PIECE_BITS 64 //check these
+# define PIECE_BITS 64
 
 //Hex constants
 # define NOT_PLACED 0x8000
+# define L_BORDER 0x8000800080008000L
+# define D_BORDER 0xFFFFL
 
 // Matching error types, error descriptions are in error.c (norm)
 typedef enum e_error
@@ -44,7 +46,6 @@ typedef enum e_error
 	BAD_PIECE_CONNECTION,
 	MISSING_NEWLINE,
 	BAD_PIECE_FORMAT,
-	NO_PRINT,
 }	t_error;
 
 typedef struct s_piece
@@ -59,7 +60,7 @@ typedef struct s_piece
 // Public function declarations
 int		validate_file(const char *file, char *buf);
 int		error(int errorcode);
-ssize_t	extract(t_piece *pieces, char *buf, int total_pieces);
-int		solve_driver(t_piece *pieces, uint16_t *board, int total_pieces);
+void	extract(t_piece *pieces, char *buf, int total_pieces);
+void	solve_driver(t_piece *pieces, uint16_t *board, int total_pieces);
 
 #endif

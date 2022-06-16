@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 11:41:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/15 14:42:49 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/16 15:46:00 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static int	solve(t_piece *p, uint16_t *board, int area, uint8_t x)
  *Driver for a recursive solver. Extends the solve area if a solution is not
  *found for area n - 1
  */
-int	solve_driver(t_piece *pieces, uint16_t *board, int piece_total)
+void	solve_driver(t_piece *pieces, uint16_t *board, int piece_total)
 {
 	int			area;
 	static char	solution[BOARD_SIZE * BOARD_SIZE];
@@ -102,5 +102,4 @@ int	solve_driver(t_piece *pieces, uint16_t *board, int piece_total)
 	}
 	set_solution(pieces, &solution[0]);
 	print_solution(&solution[0], area);
-	return (0);
 }
