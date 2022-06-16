@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 11:41:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/15 10:39:18 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/16 16:46:12 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,30 +40,40 @@ static int	solve(t_piece *p, uint16_t *board, int area)
 	uint8_t	x;
 	uint8_t	y;
 
-	/*if ( && reject(board, p) )*/
-		/*return (0);*/
 	if (p->id == 0)
+	{
+		printf("ID is 0, we placed all pieces and a solution was found!");
 		return (1);
+	}
 	x = 0;
 	y = 0;
 	while (y + p->height <= area)
 	{
 		while (x + p->width <= area)
 		{
+			printf("Board state while trying to place %c at X %hhu, Y %hhu\n", p->id, x, y);
+			print_board(board);
 			if ((*(uint64_t *)&board[y] & p->piece >> x) == 0)
 			{
 				*(uint64_t *)&board[y] ^= p->piece >> x;
 				p->pos = ((uint16_t) x) << 8 | y;
+				printf("Placement of %c at X %hhu, Y %hhu\n", p->id, x, y);
+				print_board(board);
 				if (solve(p + 1, board, area) == 1)
 					return (1);
 				*(uint64_t *)&board[y] ^= p->piece >> x;
+				printf("State after removing %c from X %hhu, Y%hhu\n", p->id, x, y);
 				p->pos = NOT_PLACED;
+				print_board(board);
 			}
+			else
+				printf("Piece %c didn't fit at X %hhu,  Y %hhu, checking next position..\n\n", p->id, x, y);
 			x++;
 		}
 		x = 0;
 		y++;
 	}
+	printf("Piece %c didn't fit on the board, returning 0 and trying a different order.\n\n", p->id);
 	return (0);
 }
 
@@ -142,10 +152,11 @@ int	solve_driver(t_piece *pieces, uint16_t *board, int piece_total)
 		ft_bzero(board, 2 * BOARD_SIZE);
 		area++;
 	}
-	printf("\nPopulated the board:\n");
+	printf("\nBoard state:\n");
 	print_board(board);
+	printf("The hex values of the rows on the board:\n");
 	for (int i = 0; i < BOARD_SIZE; i++)
-		printf("%d. value in board: %hX\n", i, board[i]);
+		printf("%d.\trow is \t%hX\n", i, board[i]);
 	print_solution(board, pieces, &solution[0], area);
 	return (0);
 }
