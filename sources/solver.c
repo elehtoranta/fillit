@@ -6,12 +6,17 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 11:41:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/15 14:42:49 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/16 17:21:56 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
+/*
+ * Takes the char array 'solution' and simply prints it to the standard output.
+ * NOTE: ft_putmem takes a memory area, interprets it as char and prints to
+ * stdout for n amount of chars.
+ */
 static void	print_solution(char *solution, int area)
 {
 	uint8_t	i;
@@ -20,11 +25,15 @@ static void	print_solution(char *solution, int area)
 	while (i < area)
 	{
 		ft_putmem(solution + (i * BOARD_SIZE), area);
-		ft_putendl("");
+		ft_putchar('\n');
 		i++;
 	}
 }
 
+/*
+ * Populates the char array 'solution' with the pieces, represented by their
+ * ID's, respectively.
+ */
 static void	set_solution(t_piece *p, char *s)
 {
 	uint8_t		x;
@@ -54,6 +63,16 @@ static void	set_solution(t_piece *p, char *s)
 	}
 }
 
+/*
+ * The brawn of the program: (backtracking) recursive algorithm that
+ * brute forces through the pieces and resolves the smallest formation
+ * possible for the given set of pieces.
+ * 
+ * The solver uses nesting to iterate through X and Y planes, checks
+ * if a piece can be placed to those coordinates, places it, tries to
+ * solve for the next piece, and if that doesn't work, tries to find
+ * a new place for this piece and repeats.
+ */
 static int	solve(t_piece *p, uint16_t *board, int area, uint8_t x)
 {
 	uint8_t	y;
@@ -86,7 +105,7 @@ static int	solve(t_piece *p, uint16_t *board, int area, uint8_t x)
  *Driver for a recursive solver. Extends the solve area if a solution is not
  *found for area n - 1
  */
-int	solve_driver(t_piece *pieces, uint16_t *board, int piece_total)
+void	solve_driver(t_piece *pieces, uint16_t *board, int piece_total)
 {
 	int			area;
 	static char	solution[BOARD_SIZE * BOARD_SIZE];
@@ -102,5 +121,4 @@ int	solve_driver(t_piece *pieces, uint16_t *board, int piece_total)
 	}
 	set_solution(pieces, &solution[0]);
 	print_solution(&solution[0], area);
-	return (0);
 }
