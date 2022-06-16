@@ -6,13 +6,13 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/18 15:59:06 by elehtora          #+#    #+#              #
-#    Updated: 2022/06/16 16:59:33 by elehtora         ###   ########.fr        #
+#    Updated: 2022/06/16 17:50:41 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-################
+#################
 ### VARIABLES ###
-################
+#################
 
 NAME			= fillit
 
@@ -79,7 +79,7 @@ fclean : clean
 
 re : fclean all
 
-#	Colors and visual effects. Used for more clearer visual representation.
+#	Colors and visual effects. Used for clearer visual representation.
 #	'NOC' stand for "no color", 'O' for orange, 'G' for gray,
 #	'DG' for dark gray, 'R' for red and 'GN' for green. 'PL' stand for
 #	"pillar left" and 'PR' for "pillar right".

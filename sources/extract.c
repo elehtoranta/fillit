@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 12:40:34 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/16 15:44:08 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/16 17:51:54 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	extract(t_piece *pieces, char *buf, int total_pieces)
 	nth = 0;
 	while (nth < total_pieces)
 	{
-		set_piece(&pieces[nth], &buf[nth * PIECE_READ], nth + 'A');
+		set_piece(&pieces[nth], &buf[nth * PIECE_READ], (char)nth + 'A');
 		nth++;
 	}
 }
