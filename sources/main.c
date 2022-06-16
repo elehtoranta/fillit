@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 22:21:53 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/16 15:51:21 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/16 18:10:10 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int argc, char **argv)
 	static t_piece	pieces[MAX_PIECES + 1];
 	static char		buf[MAX_READ + 1];
 	static uint16_t	board[BOARD_SIZE];
-	char			total_pieces;
+	int				total_pieces;
 
 	if (argc != 2)
 		return (error(BAD_ARGS));

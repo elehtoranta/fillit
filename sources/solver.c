@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 11:41:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/16 17:21:56 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/16 18:13:48 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	print_solution(char *solution, int area)
 	i = 0;
 	while (i < area)
 	{
-		ft_putmem(solution + (i * BOARD_SIZE), area);
+		ft_putmem(solution + (i * BOARD_SIZE), (size_t)area);
 		ft_putchar('\n');
 		i++;
 	}
@@ -87,7 +87,7 @@ static int	solve(t_piece *p, uint16_t *board, int area, uint8_t x)
 			if ((*(uint64_t *)&board[y] & p->piece >> x) == 0)
 			{
 				*(uint64_t *)&board[y] ^= p->piece >> x;
-				p->pos = ((uint16_t) x) << 4 | y;
+				p->pos = (uint16_t)(x << 4 | y);
 				if (solve(p + 1, board, area, 0) == 1)
 					return (1);
 				*(uint64_t *)&board[y] ^= p->piece >> x;

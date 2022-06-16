@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/15 13:58:25 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/16 18:09:57 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  * Checking is done clockwise. The first check is for out-of-bounds,
  * the second for the actual hash.
  */
-static int	count_contacts(const char *buf, size_t i, size_t contacts)
+static int	count_contacts(const char *buf, uint8_t i, uint8_t contacts)
 {
 	if (i >= 5 && *(buf - 5) == '#')
 		contacts++;
@@ -34,9 +34,9 @@ static int	count_contacts(const char *buf, size_t i, size_t contacts)
 	return (contacts);
 }
 
-static int	is_good_piece(char *buf, size_t hashes, size_t contacts)
+static int	is_good_piece(const char *buf, uint8_t hashes, uint8_t contacts)
 {
-	size_t	i;
+	uint8_t	i;
 
 	i = 0;
 	while (i < PIECE_READ - 1)
@@ -56,12 +56,12 @@ static int	is_good_piece(char *buf, size_t hashes, size_t contacts)
 		return (error(BAD_HASH_COUNT));
 	if (contacts != 6 && contacts != 8)
 		return (error(BAD_PIECE_CONNECTION));
-	return (i);
+	return (0);
 }
 
-static int	validate_pieces(char *buf, size_t ret)
+static int	validate_pieces(const char *buf, ssize_t ret)
 {
-	size_t	i;
+	uint16_t	i;
 
 	i = 0;
 	while (i < ret)
@@ -79,10 +79,9 @@ int	validate_file(const char *file, char *buf)
 {
 	int		fd;
 	ssize_t	ret;
-	char	total_pieces;
+	int		total_pieces;
 
 	fd = open(file, O_RDONLY);
-	total_pieces = -1;
 	if (fd == -1)
 		return (error(OPEN_FAIL));
 	ret = read(fd, buf, MAX_READ + 1);
@@ -95,7 +94,7 @@ int	validate_file(const char *file, char *buf)
 		return (error(FILE_MAX));
 	if ((ret + 1) % 21 != 0)
 		return (error(FILE_FORMAT));
-	total_pieces = (ret + 1) / 21;
+	total_pieces = (int)((ret + 1) / 21);
 	if (validate_pieces(buf, ret) == -1)
 		return (-1);
 	return (total_pieces);
