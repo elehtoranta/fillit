@@ -6,7 +6,7 @@
 #    By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/18 15:59:06 by elehtora          #+#    #+#              #
-#    Updated: 2022/06/16 20:32:03 by elehtora         ###   ########.fr        #
+#    Updated: 2022/06/17 14:09:34 by elehtora         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ $(NAME) : $(OBJS) $(LIBDIR)/$(LIB_BIN)
 	$(CC) $(CFLAGS) $(OBJS) -L$(LIBDIR) -l$(LIB) -o $(NAME)
 
 %.o : $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -I$(INCLDIR) -c -o $@ $<
+	$(CC) $(CFLAGS) -g -I$(INCLDIR) -c -o $@ $<
 
 $(LIBDIR)/$(LIB_BIN) :
 	cd $(LIBDIR) && $(MAKE) $(LIB_BIN) && cd ..

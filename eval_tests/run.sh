@@ -27,7 +27,7 @@ if [[ -z ${1+x} || $1 = 'i' ||  $1 = 'a' ]]; then
 	echo -e "TESTING INVALID INPUTS "
 	for file in $TEST_INVALID;
 	do
-		echo -e "Testing ${file#${TEST_INVALID}} from ${TEST_INVALID%/*}:"
-		 { time ../fillit $file && echo ; } >> ${TEST_RESULT} 2>&1
+		echo -e "Testing ${file#${TEST_INVALID}} from ${TEST_INVALID%/*}:" >> ${TEST_RESULT}
+		 { ../fillit $file && echo -e "===\n" ; } >> ${TEST_RESULT} 2>&1
 	done
 fi

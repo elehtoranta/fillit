@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 16:27:13 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/16 18:09:57 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/17 14:26:18 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,14 +85,14 @@ int	validate_file(const char *file, char *buf)
 	if (fd == -1)
 		return (error(OPEN_FAIL));
 	ret = read(fd, buf, MAX_READ + 1);
-	if (ret < 0)
+	if (ret <= 0)
 		return (error(READ_FAIL));
 	if (close(fd) == -1)
 		return (error(CLOSE_FAIL));
 	buf[ret] = 0;
 	if (ret > MAX_READ)
 		return (error(FILE_MAX));
-	if ((ret + 1) % 21 != 0)
+	if ((ret + 1) % 21 != 0 && ret % 21 != 0)
 		return (error(FILE_FORMAT));
 	total_pieces = (int)((ret + 1) / 21);
 	if (validate_pieces(buf, ret) == -1)
