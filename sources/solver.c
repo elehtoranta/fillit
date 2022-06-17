@@ -6,7 +6,7 @@
 /*   By: elehtora <elehtora@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 11:41:18 by elehtora          #+#    #+#             */
-/*   Updated: 2022/06/16 18:13:48 by elehtora         ###   ########.fr       */
+/*   Updated: 2022/06/17 11:05:39 by elehtora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	solve_driver(t_piece *pieces, uint16_t *board, int piece_total)
 	int			area;
 	static char	solution[BOARD_SIZE * BOARD_SIZE];
 
-	ft_memset(solution, '.', BOARD_SIZE * BOARD_SIZE + BOARD_SIZE);
+	ft_memset(solution, '.', BOARD_SIZE * BOARD_SIZE);
 	area = 2;
 	while (area * area < piece_total * 4)
 		area++;
