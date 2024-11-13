@@ -2,7 +2,7 @@
 ### A program to find a smallest square of given tetris pieces in the least amount of time.
 
 ## Usage
-1. Clone with `git clone https://github.com/akkrecola/fillit.git fillit`
+1. Clone with `git clone https://github.com/elehtoranta/fillit.git fillit`
 2. `make` in the repository root. It compiles the *libft* library and binary *fillit*.
 3. To run: `./fillit path/to/test/file`.
   - Note: Files with invalid formatting will produce an error.
